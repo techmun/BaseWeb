@@ -1,18 +1,86 @@
+
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
+
+.textbox-bordered {
+    border: 1px solid #bdbab9;
+    padding: 0 5px;
+    border-radius: 5px;
+}
+
+    .textbox-bordered .form-control {
+        padding: 10px 2px 0 5px;
+        margin-bottom: 5px;
+        border: 0;
+        border-bottom: 1px solid #ced4da;
+        border-radius: 0;
+    }
+
+input.input-validation-error,
+textarea.input-validation-error,
+select.input-validation-error {
+    background: #FEF1EC;
+}
+
+.textbox-bordered:has(> input.input-validation-error),
+.textbox-bordered:has(> textarea.input-validation-error),
+.textbox-bordered:has(> select.input-validation-error) {
+    border: 1px solid #CD0A0A;
+}
+
+/*for specific password field*/
+.textbox-bordered:has(> .row .col-11 input.input-validation-error),
+.textbox-bordered:has(> .row .col-11 textarea.input-validation-error)
+.textbox-bordered:has(> .row .col-11 select.input-validation-error) {
+    border: 1px solid #CD0A0A;
+}
+
+.textbox-bordered .row, .textbox-bordered .row .col-11 {
+    margin: 0;
+    padding: 0;
+}
+
+.pwIcon {
+    font-size: 18px;
+    cursor: pointer;
+    color:#808080;
+}
+/*sm*/
+@media (min-width: 576px) {
+}
+
+
+/*md*/
+@media (min-width: 768px) {
+    .loginContainer {
+        width: 80% !important;
+    }
+}
+
+/*lg*/
+@media (min-width: 992px) {
+    .loginContainer {
+        width: 50% !important;
+    }
+}
+
+/*xl*/
+@media (min-width: 1200px) {
+}
+

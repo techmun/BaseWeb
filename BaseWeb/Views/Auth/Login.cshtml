@@ -1,0 +1,73 @@
+﻿@using System.Web;
+@{
+    Layout = "_LayoutWithoutNavi";
+}
+@model BaseWeb.ViewModels.UserLoginViewModel
+
+<div class="container d-lg-block d-none" style="height:250px"></div>
+<div class="container d-block d-lg-none" style="height:200px"></div>
+<div class="container loginContainer" style="margin:auto;">
+    @using (Html.BeginForm("Login", "Auth", FormMethod.Post))
+    {
+        <div class="row pb-5">
+            <div class="col h2">Sign In</div>
+        </div>
+        <div class="row">
+
+            <div class="col-3">@Html.LabelFor(m=>m.LoginId,new { @class="pr-3"})</div>
+            <div class="col-9 w-75 textbox-bordered">@Html.TextBoxFor(m=>m.LoginId,new { @class="form-control"})</div>
+        </div>
+        <div class="row pb-3">
+
+            <div class="col-3"></div>
+            <div class="col-9 line-heigh">@Html.ValidationMessageFor(m=>m.LoginId,"", new{@class="text-danger"})</div>
+        </div>
+        <div class="row">
+
+            <div class="col-3">@Html.LabelFor(m=>m.Password,new { @class="pr-3"})</div>
+            <div class="col-9 textbox-bordered">
+                <div class="row">
+                    <div class="col-11">
+                        @Html.PasswordFor(m=>m.Password,new { @class="form-control"})
+                    </div>
+                    <div class="col-1 d-flex align-items-center">
+                        <span class="glyphicon glyphicon-eye-open pwIcon" style="display:none;" id="hidePass"></span>
+                        <span class="glyphicon glyphicon-eye-close pwIcon" id="showPass"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row pb-5">
+
+            <div class="col-3"></div>
+            <div class="col-9 ">@Html.ValidationMessageFor(m=>m.Password,"", new{@class="text-danger"})</div>
+        </div>
+        <div class="row">
+            <span class="text-danger">@Html.DisplayFor(m=>m.errMsg)</span>
+            <input type="submit" value="Log in" class="btn btn-info w-100" />
+        </div>
+    }
+</div>
+<script>
+    //$('#showPass').on('change', function () {
+    //    var checked = $(this).is(":checked");
+    //    if (checked) {
+    //        $("#Password").attr("type", "text");
+    //    } else {
+    //        $("#Password").attr("type", "password");
+    //    }
+    //});
+
+    $('#showPass').on('click', function () {
+        $("#Password").attr("type", "text");
+        $("#hidePass").css("display", "block");
+        $("#showPass").css("display", "none");
+    });
+
+    $('#hidePass').on('click', function () {
+        $("#Password").attr("type", "password");
+        $("#showPass").css("display", "block");
+        $("#hidePass").css("display", "none");
+    });
+</script>

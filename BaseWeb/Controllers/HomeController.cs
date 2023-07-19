@@ -1,13 +1,13 @@
-﻿using BaseWeb.Models;
+﻿
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using static BaseWeb.Utilities.ActionFilterConfig;
 
 namespace BaseWeb.Controllers
 {
     public class HomeController : Controller
     {
-       
-
+        
+        [Authentication]
         public IActionResult Index()
         {
             
