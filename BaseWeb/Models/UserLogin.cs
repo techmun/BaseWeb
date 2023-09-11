@@ -10,24 +10,24 @@ namespace BaseWeb.Models
         [Key]
         [MaxLength(25)]
         public string LoginId { get; set; } 
+
         public string Password { get; set; }
 
         [MaxLength(100)]
         public string UserName { get; set; }
 
-        [MaxLength(25)]
-        public string Role { get; set; }
+        [DefaultValue(false)]
+        public Boolean isAdmin { get; set; }
 
-        [MaxLength(100)]
-        public string Email { get; set; }
-        public int Phone { get; set; }
         public bool isActived { get; set; }
+
         [MaxLength(25)]
         public string CreatedBy { get; set; }
-        public DateTime CreatedDate { get;set; }
+        public DateTime CreatedDate { get;set; } = DateTime.Now;
+
         [MaxLength(25)]
-        public string EditedBy { get; set; }    
-        public DateTime EditedDate { get; set;}
+        public string EditedBy { get; set; }
+        public DateTime EditedDate { get; set; } = DateTime.Now;
 
     }
 }

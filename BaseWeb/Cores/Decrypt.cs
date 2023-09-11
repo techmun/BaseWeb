@@ -5,14 +5,14 @@ namespace BaseWeb.Cores
 {
     public class Decrypt
     {
-        public string Decrypted(string key)
+        public static string Decrypted(string key)
         {
             string step1 = DecrptWithCharChoice(key);
             string step2 = DecryptWithClass(step1);
             return step2;
         }
 
-        public string DecryptWithClass(string key)
+        public static string DecryptWithClass(string key)
         {
 
             byte[] b;
@@ -29,7 +29,7 @@ namespace BaseWeb.Cores
             return decrypted;
         }
 
-        public string DecrptWithCharChoice(string cipherText)
+        public static string DecrptWithCharChoice(string cipherText)
         {
             string EncryptionKey = "qwertyuiop";
             cipherText = cipherText.Replace(" ", "+");

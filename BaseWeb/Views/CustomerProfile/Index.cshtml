@@ -1,0 +1,159 @@
+﻿@{
+    ViewData["Title"] = "Customer Profile";
+}
+
+<div>
+    <div class="row">
+        <div class="col-8 col-lg-5">
+            <div><input type="text" class="form-control" id="txtSearchCustProf" /></div>
+        </div>
+        <div class="col-4 col-lg-1">
+            <button class="btn btn-info w-100 h-100" id="btnCustProfSearch" value="Search">Search</button>
+        </div>
+    </div>
+
+    <div class="p-3"></div>
+    <button class="btn btn-primary mb-2" id="btnAddCustProf">Add Customer</button>
+    <div>
+        <table id="CustProfGrid"></table>
+        <div id="tblGridPager" style="text-align:center"> </div>
+    </div>
+
+</div>
+<div class="modal fade" id="AddEditCustProfModal" tabindex="-1" role="dialog" aria-labelledby="AddEditCustProfModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddEditCustProfModalLabel"></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body h-100 w-100">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnAddEdit" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="_ValidationScriptsPartial" />
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/CustomerProfile/GetCustProfList",
+            success: function (result) {
+
+                if (result.success)
+                    loadCustProfList($.parseJSON(result.lsCustProf));
+                else
+                    swal("", result.message, "error");
+            }
+        });
+    });
+
+    $('#btnCustProfSearch').click(function () {
+        $.ajax({
+            type: "GET",
+            url: "/CustomerProfile/GetCustProfList?filter=" + encodeURIComponent($('#txtSearchCustProf').val()),
+            success: function (result) {
+                console.log($.parseJSON(result.lsCustProf))
+                if (result.success) {
+                    $('#CustProfGrid').jqGrid('clearGridData');
+                    $('#CustProfGrid').setGridParam({ data: $.parseJSON(result.lsCustProf) }).trigger('reloadGrid');
+                }
+                else {
+                    swal("", result.message, "error");
+                }
+            }
+        });
+    });
+
+    function loadCustProfList(ls) {
+        $("#CustProfGrid").jqGrid({
+            datatype: "local",
+            data: ls,
+            colNames: ['', 'Code', 'Customer Name', 'Contact Person', 'Contact No', 'Email', ''],
+            colModel: [
+                { name: 'viewCP', index: "viewCP", formatter: viewCP, width: 30 },
+                { name: 'CustCode', index: "CustCode", width: 100 },
+                { name: 'CustName', index: "CustName", width: 250 },
+                { name: 'ContactPS', index: "ContactPS", width: 200 },
+                { name: 'ContactNo', index: "ContactNo", width: 200 },
+                { name: 'Email', index: "Email", width: 250 },
+                { name: 'delCP', index: "delCP", formatter: delCP, width: 30 },
+            ],
+            height: '400',
+            rowNum: 10,
+            pager: '#tblGridPager'
+        });
+    }
+
+    function viewCP(cellvalue, options, rowObject){
+        var innerhtml = '<i class="fa-solid fa-user-pen gridIcon" style="color:#223658" onclick="btnViewCP()"></i>';
+        return innerhtml;
+    }
+
+    function delCP(cellvalue, options, rowObject) {
+        var innerhtml = '<i class="fa-solid fa-trash-can gridIcon" style="color:#de1212" onclick="btnDelCP()"></i>';
+        return innerhtml;
+    }
+
+    function btnViewCP(){
+
+    }
+
+    function btnDelCP() {
+
+    }
+
+    $('#btnAddCustProf').on('click', function () {
+
+        $('#AddEditCustProfModalLabel').text('Create Comapany');
+        $('#btnAddEdit').text('Create');
+        $.ajax({
+            type: "GET",
+            url: "/CustomerProfile/AddEdit?type=I",
+            success: function (result) {
+                $("#AddEditCustProfModal").find(".modal-body").html(result);
+                $("#AddEditCustProfModal").modal('show');
+            }
+        });
+    });
+    $('#btnAddEdit').click(function () {
+
+        var form = $("#AddEditCustProfModal").find('form');
+        var actionUrl = form.attr('action');
+        var dataToSend = form.serialize();
+        $.validator.unobtrusive.parse(form);
+        form.validate();
+        if (form.valid()) {
+            $.ajax({
+                url: actionUrl + "?queryType=I",
+                type: "POST",
+                data: dataToSend,
+                beforeSend: function () {
+                    
+                },
+                success: function (result) {
+                    if (result.success) {
+                        $("#AddEditCustProfModal").modal('hide');
+                        swal("", "Customer Profile Created Successfully!", "success");
+                          $('#btnCustProfSearch').trigger('click');
+
+                    }
+                    else if (!result.success && result.message != null) {
+                        swal("", result.message, "error");
+                    }
+                },
+                complete: function () {
+                },
+
+            });
+        }
+
+    });
+
+</script>

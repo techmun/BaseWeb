@@ -1,0 +1,173 @@
+﻿
+<div class="pt-5">
+    <button class="btn btn-primary mb-2" id="btnAddDA">Add DA</button>
+    <div>
+        <table id="daGrid"></table>
+        <div id="tblDAGridPager" style="text-align:center"> </div>
+    </div>
+</div>
+
+<div class="modal fade" id="AddEditDAModal" tabindex="-1" role="dialog" aria-labelledby="AddEditDAModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddEditDAModalLabel"></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body h-100 w-100">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnAddEditDA" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="CheckListModal" tabindex="-1" role="dialog" aria-labelledby="CheckListModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="CheckListModalLabel">CheckList</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body h-100 w-100">
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">NRIC</label>
+                    <input class="form-control" type="file" id="formFile">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnAddEditCheckList" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="AddEditCustProfModal" tabindex="-1" role="dialog" aria-labelledby="AddEditCustProfModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddEditCustProfModalLabel"></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body h-100 w-100">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnAddEditCust" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        loadDAGrid();
+    });
+
+    function loadDAGrid(){
+        var ls = [{ CompName: "abc sdn bhd", LicenseNo: "k12374215372", JobType: "MBSJ - LICENSE - KEDAI" }];
+        $("#daGrid").jqGrid({
+            datatype: "local",
+            data: ls,
+            colNames: ['', '', 'Customer Name', 'License No', 'Job Type', ''],
+            colModel: [
+                { name: 'editDA', index: "editDA", formatter:editDA, width: 30 },
+                { name: 'ViewCheckList', index: "ViewCheckList", formatter: ListDA, width: 30 },
+                { name: 'CompName', index: "CompName", width: 250 },
+                { name: 'LicenseNo', index: "LicenseNo", width: 250 },
+                { name: 'JobType', index: "JobType", width: 350 },
+                { name: 'deleteDA', index: "deleteDA", formatter: delDA, width: 30 },
+            ],
+            height: '400',
+            rowNum: 10,
+            pager: '#tblDAGridPager'
+        });
+    }
+
+    function editDA(cellvalue, options, rowObject) {
+        console.log(cellvalue)
+        console.log(options)
+        console.log(rowObject)
+
+        var innerhtml = '<i class="fa-solid fa-pencil gridIcon" style="color:#28e010" onclick="btnEditDA()"></i>';
+        
+        return innerhtml;
+    }
+
+    function delDA(cellvalue, options, rowObject) {
+        var innerhtml = '<i class="fa-solid fa-trash-can gridIcon" style="color:#de1212" onclick="btnDelDA()"></i>';
+        return innerhtml;
+    }
+
+    function ListDA(cellvalue, options, rowObject) {
+        var innerhtml = '<i class="fa-regular fa-clipboard-list gridIcon" style="color:#0080ff" onclick="btnListDA()"></i>';
+        return innerhtml;
+    }
+
+    function btnEditDA() {
+
+        console.log("Edit");
+    }
+
+    function btnDelDA() {
+        console.log("del");
+    }
+
+    function btnListDA() {
+        $("#CheckListModal").modal('show');
+    }
+
+    $('#btnAddDA').on('click', function () {
+
+        $('#AddEditDAModalLabel').text('Add Data Allocate');
+        $('#btnAddEditCust').text('Create');
+        $.ajax({
+            type: "GET",
+            url: "/ProcessingList/AddEditDA?type=I",
+            success: function (result) {
+                $("#AddEditDAModal").find(".modal-body").html(result);
+                $("#AddEditDAModal").modal('show');
+            }
+        });
+    });
+    $('#btnAddEditCust').click(function () {
+
+        var form = $("#AddEditCustProfModal").find('form');
+        var actionUrl = form.attr('action');
+        var dataToSend = form.serialize();
+        $.validator.unobtrusive.parse(form);
+        form.validate();
+        if (form.valid()) {
+            $.ajax({
+                url: actionUrl + "?queryType=I",
+                type: "POST",
+                data: dataToSend,
+                beforeSend: function () {
+
+                },
+                success: function (result) {
+                    if (result.success) {
+                        $("#AddEditCustProfModal").modal('hide');
+                        swal("", "Customer Profile Created Successfully!", "success");
+                        $('#btnCustProfSearch').trigger('click');
+
+                    }
+                    else if (!result.success && result.message != null) {
+                        swal("", result.message, "error");
+                    }
+                },
+                complete: function () {
+                },
+
+            });
+        }
+
+    });
+</script>

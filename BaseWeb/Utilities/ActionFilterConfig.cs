@@ -32,10 +32,12 @@ namespace BaseWeb.Utilities
             public override void OnActionExecuting(ActionExecutingContext filterContext)
             {
                 var httpContext = filterContext.HttpContext.Request.Headers["Referer"].ToString();
-                
 
-                if (filterContext.HttpContext.Request.GetTypedHeaders().Referer == null)
+                if (filterContext.HttpContext.Request.GetTypedHeaders().Referer == null ||
+                    filterContext.HttpContext.Request.GetTypedHeaders().Referer.Host != filterContext.HttpContext.Request.Host.Host)
                 {
+                    filterContext.HttpContext.Session.Clear();
+
                     filterContext.Result = new RedirectToRouteResult(new
                                    RouteValueDictionary(new { controller = "Auth", action = "Login", area = "" }));
                 }

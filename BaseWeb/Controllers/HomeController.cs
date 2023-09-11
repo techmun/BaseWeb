@@ -8,6 +8,7 @@ namespace BaseWeb.Controllers
     {
         
         [Authentication]
+        [NoDirectAccess]
         public IActionResult Index()
         {
             

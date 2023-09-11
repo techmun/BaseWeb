@@ -5,7 +5,7 @@ namespace BaseWeb.Cores
 {
     public class Encrypt
     {
-        public string Encrypted(string key)
+        public static string Encrypted(string key)
         {
             string step1 = EncryptWithClass(key);
             string step2 = EncrptWithCharChoice(step1);
@@ -15,7 +15,7 @@ namespace BaseWeb.Cores
         
 
         //step1
-        public string EncryptWithClass(string key)
+        public static string EncryptWithClass(string key)
         {
             byte[] b = System.Text.ASCIIEncoding.ASCII.GetBytes(key);
             string encrypted = Convert.ToBase64String(b);
@@ -24,7 +24,7 @@ namespace BaseWeb.Cores
 
         //step2
 
-        public string EncrptWithCharChoice(string encryptString)
+        public static string EncrptWithCharChoice(string encryptString)
         {
             string EncryptionKey = "qwertyuiop";
             byte[] clearBytes = Encoding.Unicode.GetBytes(encryptString);

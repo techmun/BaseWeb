@@ -4,16 +4,28 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BaseWeb</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/BaseWeb.styles.css" asp-append-version="true" />
 
+    <link rel="stylesheet" href="~/BaseWeb.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/jqgrid/css/ui.jqgrid-bootstrap5.css" rel="stylesheet" />
+    <link href="~/lib/jqueryui/themes/base/jquery-ui.css" rel="stylesheet" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jqgrid/js/jquery.jqgrid.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/lib/jqueryui/jquery-ui.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <link href="~/fontawesome/css/fontawesome.css" rel="stylesheet" />
+    <link href="~/fontawesome/css/brands.css" rel="stylesheet" />
+    <link href="~/fontawesome/css/solid.css" rel="stylesheet" />
+    <script src="~/lib/jqgrid/js/i18n/grid.locale-en.min.js"></script>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="~/bootstrap-sweetalert/sweetalert.min.css" rel="stylesheet" />
+    <script src="~/bootstrap-sweetalert/sweetalert.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 </head>
 <body>
-    <header>
+    @*<header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BaseWeb</a>
@@ -36,12 +48,89 @@
                 </div>
             </div>
         </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    </header>*@
+    <div class="container w-100">
+        <div class="main">
+            <div class="row">
+                <div class="col-1 col-lg-3 vh-100">
+                    <div style="height:250px;">
+                    </div>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between p-5">
+                        <ul class="navbar-nav side-nav-bar flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link nav-d text-dark" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="fa-solid fa-square-poll-horizontal fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-d text-dark" asp-area="" asp-controller="ProcessingList" asp-action="Index">
+                                    <i class="fa-solid fa-square-poll-horizontal fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Processing List</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-d text-dark" asp-area="" asp-controller="CustomerProfile" asp-action="Index">
+                                    <i class="fa-solid fa-user fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Customer Profile</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-d text-dark" asp-area="" asp-controller="Setting" asp-action="Index">
+                                    <i class="fa-solid fa-file-lines fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Doc Allocate</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-d text-dark" asp-area="" asp-controller="Setting" asp-action="Index">
+                                    <i class="fa-solid fa-fire-extinguisher fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Fire Extingusher</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-d text-dark" asp-area="" asp-controller="Setting" asp-action="Index">
+                                    <i class="fa-solid fa-bug fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Pest Control</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-d text-dark" asp-area="" asp-controller="Setting" asp-action="Index">
+                                    <i class="fa-solid fa-gears fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Setting</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-d text-dark" asp-area="" asp-controller="Auth" asp-action="Logout">
+                                    <i class="fa-solid fa-arrow-right-from-bracket fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class=" col-10 col-lg-9">
+                    <div style="height:50px"></div>
+                    <div class="h2 align-text-bottom pb-5">
+                        @ViewData["Title"]
+                    </div>
+                    <main role="main" class="pb-2">
+                        @RenderBody()
+                    </main>
+                </div>
+            </div>
+        </div>
     </div>
+    
+    <script>
+        $(function ($) {
+            let url = window.location.href;
+            $('li a').each(function () {
+                if (this.href === url) {
+                    $(this).closest('li').addClass('active');
+                }
+            });
+        });
+
+        $(document).on("ajaxStart", function () {
+            $('.loader').show();
+        }); 
+        
+        $(document).on("ajaxStop", function () {
+            $('.loader').hide();
+        })
+    </script>
 
     @*<footer class="border-top footer text-muted">
         <div class="container">

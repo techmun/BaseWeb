@@ -1,31 +1,17 @@
 ﻿using BaseWeb.Cores;
 using BaseWeb.DAL;
-using BaseWeb.Data;
 using BaseWeb.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Configuration;
 using System.Data;
 
 namespace BaseWeb.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly IConfiguration configuration;
-
-        public AuthController(IConfiguration _configuration)
-        {
-            configuration = _configuration;
-        }
-
         public IActionResult Login()
         {
             if (HttpContext.Session.GetString("UserName") == null)
             {
-                Decrypt decrypt = new Decrypt();
-                Encrypt encrypt = new Encrypt();;
-                string enc = encrypt.Encrypted("1234");
                 return View();
             }
             else
@@ -49,7 +35,8 @@ namespace BaseWeb.Controllers
             }
             else
             {
-                HttpContext.Session.SetString("UserName", userLogin.LoginId);
+                storeSession(userLogin);
+                
             }
 
 
@@ -67,9 +54,7 @@ namespace BaseWeb.Controllers
 
         private bool isLoginSuccess(ref UserLoginViewModel userLogin)
         {
-            Decrypt decrypt = new Decrypt();
-            Encrypt encrypt = new Encrypt();
-            string constr = decrypt.Decrypted(configuration.GetConnectionString("Default"));
+            string constr = ConnStr.connection();
 
             LoginDAL dal = new LoginDAL(constr);
 
@@ -78,7 +63,7 @@ namespace BaseWeb.Controllers
             if (dt.Rows.Count > 0)
             {
                 var pw = dt.AsEnumerable().Select(r => r["Password"]).ToList().FirstOrDefault();
-                var ePw = encrypt.Encrypted(userLogin.Password);
+                var ePw = Encrypt.Encrypted(userLogin.Password);
                 if (pw.ToString() != ePw)
                 {
 
@@ -95,5 +80,13 @@ namespace BaseWeb.Controllers
 
             return true;
         }
+
+
+        private void storeSession(UserLoginViewModel userLogin)
+        {
+            HttpContext.Session.SetString("UserName", userLogin.LoginId);
+        }
+
+
     }
 }

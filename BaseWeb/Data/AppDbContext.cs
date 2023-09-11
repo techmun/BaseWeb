@@ -8,21 +8,15 @@ namespace BaseWeb.Data
     {
 
         public DbSet<UserLogin> Users { get; set; }
-
-        private Decrypt decrypt = new Decrypt();
-
-        private readonly IConfiguration configuration;
-        private readonly IHttpContextAccessor context;
-        public AppDbContext( IConfiguration _configuration, IHttpContextAccessor _context)
-        {
-            configuration = _configuration;
-            context = _context;
-        }
+        public DbSet<Services> Services { get; set; }
+        public DbSet<DAProcess> DAProcess { get; set; }
+        public DbSet<CustProf> CustProf { get; set; }
+        public DbSet<Documents> Documents { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
-            string constr = decrypt.Decrypted(configuration.GetConnectionString("Default"));
+            string constr = ConnStr.connection();
             optionsBuilder.UseMySQL(constr);
         }
     }

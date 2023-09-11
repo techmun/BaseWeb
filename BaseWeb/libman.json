@@ -1,0 +1,40 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "jquery@3.7.0",
+      "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "library": "jqgrid@5.8.5",
+      "destination": "wwwroot/lib/jqgrid/"
+    },
+    {
+      "library": "jqueryui@1.13.2",
+      "destination": "wwwroot/lib/jqueryui/jqueryui/",
+      "files": [
+        "jquery-ui.min.js",
+        "jquery-ui.js",
+        "themes/base/images/ui-icons_ffffff_256x240.png",
+        "themes/base/images/ui-icons_cc0000_256x240.png",
+        "themes/base/images/ui-icons_777777_256x240.png",
+        "themes/base/images/ui-icons_777620_256x240.png",
+        "themes/base/images/ui-icons_555555_256x240.png",
+        "themes/base/images/ui-icons_444444_256x240.png",
+        "themes/base/theme.min.css",
+        "themes/base/theme.css",
+        "themes/base/jquery-ui.min.css",
+        "themes/base/jquery-ui.css"
+      ]
+    },
+    {
+      "library": "bootstrap@5.3.1",
+      "destination": "wwwroot/lib/bootstrap/"
+    },
+    {
+      "library": "bootstrap-sweetalert@1.0.1",
+      "destination": "wwwroot/bootstrap-sweetalert/"
+    }
+  ]
+}

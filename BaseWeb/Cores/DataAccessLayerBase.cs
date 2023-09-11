@@ -13,21 +13,15 @@ namespace BaseWeb.Cores
         public DataTable toDataTabe(MySqlCommand cmd)
         {
             var dataTable = new DataTable();
-            try
+            using (var connection = new MySqlConnection(constr))
             {
-                using (var connection = new MySqlConnection(constr))
-                {
-                    connection.Open();
-                    cmd.Connection = connection;
-                    var reader = cmd.ExecuteReader();
-                    dataTable.Load(reader);
+                connection.Open();
+                cmd.Connection = connection;
+                var reader = cmd.ExecuteReader();
+                dataTable.Load(reader);
 
-                    
-                }
-            }catch(Exception ex) {
 
             }
-
             return dataTable;
 
         }
