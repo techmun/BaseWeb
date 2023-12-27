@@ -3,20 +3,25 @@
 }
 
 <div>
-    <div class="row">
-        <div class="col-8 col-lg-5">
-            <div><input type="text" class="form-control" id="txtSearchCustProf" /></div>
+    <div class="btn-toolbar mb-5" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group me-3 mb-2" role="group" aria-label="Add group">
+            <button class="btn btn-primary" id="btnAddCustProf"><i class="fa-solid fa-plus px-1"></i></>Add</button>
+            <label for="CustProfFiles" class="btn btn-primary btn-label"><i class="fa-solid fa-upload px-1"></i><span>Import</span></label>
+            <input id="CustProfFiles" style="visibility:hidden;display:none;" type="file" onchange="uploadCustProfFile('CustProfFiles')">
+            <button class="btn btn-primary" id="btnExpCustProf"><i class="fa-solid fa-download px-1"></i></>Export</button>
         </div>
-        <div class="col-4 col-lg-1">
-            <button class="btn btn-info w-100 h-100" id="btnCustProfSearch" value="Search">Search</button>
+        <div class="btn-group me-3" role="group" aria-label="Search Group">
+            <input type="text" class="form-control" autocomplete="off" placeholder="Search..." id="txtSearchCustProf" />
+            <button class="btn btn-primary" id="btnCustProfSearch" value="Search"><i class="fa fa-magnifying-glass icon px-1"></i>Search</button>
+        </div>
+        <div class="btn-group me-3 mb-2" role="group" aria-label="function group">
+            <button class="btn btn-primary" id="btnExpiryDate"><i class="fa-solid fa-calendar-days px-1"></i></>Expiry Date</button>
+            <button class="btn btn-primary" id="btnSyarat"><i class="fa-regular fa-file-lines px-1"></i></>Syarat-syarat</button>
         </div>
     </div>
-
-    <div class="p-3"></div>
-    <button class="btn btn-primary mb-2" id="btnAddCustProf">Add Customer</button>
     <div>
         <table id="CustProfGrid"></table>
-        <div id="tblGridPager" style="text-align:center"> </div>
+        <div id="tblCustProfGridPager" style="text-align:center"> </div>
     </div>
 
 </div>
@@ -32,7 +37,26 @@
             <div class="modal-body h-100 w-100">
             </div>
             <div class="modal-footer">
-                <button type="button" id="btnAddEdit" class="btn btn-primary">Save changes</button>
+                <button type="button" id="btnNext" class="btn btn-primary">Next</button>
+                <button type="button" id="btnAddEdit" class="btn btn-primary d-none">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ExpiryModal" tabindex="-1" role="dialog" aria-labelledby="ExpiryModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ExpiryModalLabel">Expiry Date</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body h-100 w-100" id="ExpiryModalBody" style="min-height:600px;">
+            </div>
+            <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -40,6 +64,7 @@
 </div>
 <partial name="_ValidationScriptsPartial" />
 <script>
+    var cpList = [];
     $(document).ready(function () {
         $.ajax({
             type: "GET",
@@ -47,7 +72,10 @@
             success: function (result) {
 
                 if (result.success)
-                    loadCustProfList($.parseJSON(result.lsCustProf));
+                {
+                    cpList = $.parseJSON(result.lsCustProf);
+                    loadCustProfList(cpList);
+                }
                 else
                     swal("", result.message, "error");
             }
@@ -59,10 +87,10 @@
             type: "GET",
             url: "/CustomerProfile/GetCustProfList?filter=" + encodeURIComponent($('#txtSearchCustProf').val()),
             success: function (result) {
-                console.log($.parseJSON(result.lsCustProf))
                 if (result.success) {
+                    cpList = $.parseJSON(result.lsCustProf);
                     $('#CustProfGrid').jqGrid('clearGridData');
-                    $('#CustProfGrid').setGridParam({ data: $.parseJSON(result.lsCustProf) }).trigger('reloadGrid');
+                    $('#CustProfGrid').setGridParam({ data: cpList }).trigger('reloadGrid');
                 }
                 else {
                     swal("", result.message, "error");
@@ -75,38 +103,64 @@
         $("#CustProfGrid").jqGrid({
             datatype: "local",
             data: ls,
-            colNames: ['', 'Code', 'Customer Name', 'Contact Person', 'Contact No', 'Email', ''],
+            colNames: ['', 'Code', 'Company Name', 'Contact Person', 'Contact No', 'Email', ''],
             colModel: [
                 { name: 'viewCP', index: "viewCP", formatter: viewCP, width: 30 },
                 { name: 'CustCode', index: "CustCode", width: 100 },
-                { name: 'CustName', index: "CustName", width: 250 },
-                { name: 'ContactPS', index: "ContactPS", width: 200 },
-                { name: 'ContactNo', index: "ContactNo", width: 200 },
+                { name: 'CustName', index: "CustName", width: 500 },
+                { name: 'ContactPS', index: "ContactPS", width: 300 },
+                { name: 'ContactNo', index: "ContactNo", width: 150 },
                 { name: 'Email', index: "Email", width: 250 },
                 { name: 'delCP', index: "delCP", formatter: delCP, width: 30 },
             ],
-            height: '400',
+            height: '401',
             rowNum: 10,
-            pager: '#tblGridPager'
+            pager: '#tblCustProfGridPager'
         });
     }
 
-    function viewCP(cellvalue, options, rowObject){
+    function viewCP(cellvalue, options, rowObject) {
         var innerhtml = '<i class="fa-solid fa-user-pen gridIcon" style="color:#223658" onclick="btnViewCP()"></i>';
         return innerhtml;
     }
 
     function delCP(cellvalue, options, rowObject) {
-        var innerhtml = '<i class="fa-solid fa-trash-can gridIcon" style="color:#de1212" onclick="btnDelCP()"></i>';
+        var innerhtml = '<i class="fa-solid fa-trash-can gridIcon" style="color:#de1212" onclick="btnDelCP(\'' + rowObject.CustCode + '\')"></i>';
         return innerhtml;
     }
 
-    function btnViewCP(){
+    function btnViewCP() {
 
     }
 
-    function btnDelCP() {
+    function btnDelCP(CustCode) {
+        swal({
+            title: "",
+            text: "Customer Profile will be permenantly deleted after confirm.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#DD6B55',
+            confirmButtonText: 'Confirm',
+            cancelButtonText: "Cancel",
+            closeOnConfirm: false
+        },
+            function (isConfirm) {
 
+                if (isConfirm) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/CustomerProfile/DeleteCust?CustCode=" + CustCode,
+                        success: function (result) {
+                            if(result.success){
+                                swal("","delete successfully!","success");
+                                $('#btnCustProfSearch').trigger('click');
+                            }else{
+                                swal("", result.message, "error");
+                            }
+                        }
+                    });
+                }
+            });
     }
 
     $('#btnAddCustProf').on('click', function () {
@@ -122,38 +176,77 @@
             }
         });
     });
-    $('#btnAddEdit').click(function () {
 
-        var form = $("#AddEditCustProfModal").find('form');
-        var actionUrl = form.attr('action');
-        var dataToSend = form.serialize();
-        $.validator.unobtrusive.parse(form);
-        form.validate();
-        if (form.valid()) {
-            $.ajax({
-                url: actionUrl + "?queryType=I",
-                type: "POST",
-                data: dataToSend,
-                beforeSend: function () {
-                    
-                },
-                success: function (result) {
-                    if (result.success) {
-                        $("#AddEditCustProfModal").modal('hide');
-                        swal("", "Customer Profile Created Successfully!", "success");
-                          $('#btnCustProfSearch').trigger('click');
+    $("#AddEditCustProfModal").on("hidden.bs.modal", function () {  //reset popup
+        $('#btnNext').removeClass('d-none');
+        $('#btnNext').addClass('d-block');
+        $('#btnAddEdit').removeClass('d-block');
+        $('#btnAddEdit').addClass('d-none');
+        $("#AddEditCustProfModal").find(".modal-body").html('');
+    }); 
 
-                    }
-                    else if (!result.success && result.message != null) {
-                        swal("", result.message, "error");
-                    }
-                },
-                complete: function () {
-                },
-
-            });
-        }
-
+    $("#ExpiryModal").on("hidden.bs.modal", function () {  //reset popup
+        $('#btnNext').removeClass('d-none');
+        $('#btnNext').addClass('d-block');
+        $('#btnAddEdit').removeClass('d-block');
+        $('#btnAddEdit').addClass('d-none');
+        $("#ExpiryModal").find(".modal-body").html('');
     });
 
+    function uploadCustProfFile(inputId) {
+        var input = document.getElementById(inputId);
+        var files = input.files;
+        var formData = new FormData();
+        for (var i = 0; i != files.length; i++) {
+            formData.append("files", files[i]);
+        }
+        $.ajax(
+            {
+                url: "/CustomerProfile/ImportCP",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function (result) {
+                    $('.loader').hide();
+                    if (result.success) {
+                        $('#CustProfFiles').val('');
+                        $.ajax({
+                            type: "GET",
+                            url: "/CustomerProfile/GetCustProfList?filter=" + encodeURIComponent($('#txtSearchCustProf').val()),
+                            success: function (result) {
+                                if (result.success) {
+                                    cpList = $.parseJSON(result.lsCustProf);
+                                    $('#CustProfGrid').jqGrid('clearGridData');
+                                    $('#CustProfGrid').setGridParam({ data: cpList }).trigger('reloadGrid');
+                                }
+                                else {
+                                    swal("", result.message, "error");
+                                }
+                            }
+                        });
+                        swal('', 'Files Uploaded!', 'success');
+                    } else {
+                        $('#CustProfFiles').val('');
+                        swal('', result.msg, 'error');
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('#CustProfFiles').val('')
+                }
+            }
+        );
+    }
+
+    $('#btnExpiryDate').on('click', function () {
+        var selRowId = $('#CustProfGrid').jqGrid("getGridParam", "selrow");
+        if (selRowId != null) {
+            var rowData = $('#CustProfGrid').jqGrid("getRowData", selRowId);
+            $("#ExpiryModalBody").load("/CustomerProfile/ExpiryDate?CustCode=" + encodeURIComponent(rowData.CustCode) + "&CustName=" + encodeURIComponent(rowData.CustName));
+            $("#ExpiryModal").modal('show');
+        }else{
+            $("#ExpiryModalBody").load("/CustomerProfile/ExpiryDate?CustCode=&CustName=");
+            $("#ExpiryModal").modal('show');
+        }
+    });
 </script>

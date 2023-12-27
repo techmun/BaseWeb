@@ -7,66 +7,84 @@
     {
         <div class="container w-100">
             @Html.AntiForgeryToken()
-            <div class="pb-2">
-                <div>@Html.LabelFor(m=>m.CustCode,new { @class="pr-3"})<span style="color:red">*</span></div>
-                <div class="w-100">@Html.TextBoxFor(m=>m.CustCode,new { @class="form-control"})</div>
-                @Html.ValidationMessageFor(m=>m.CustCode,"", new{@class="text-danger"})
-            </div>
-            <div class="pb-2">
-                <div>@Html.LabelFor(m=>m.CustName,new { @class="pr-3"})<span style="color:red">*</span></div>
-                <div class="w-100">@Html.TextBoxFor(m=>m.CustName,new { @class="form-control"})</div>
-                @Html.ValidationMessageFor(m=>m.CustName,"", new{@class="text-danger"})
+            <div class="row">
+                <div class="col-2">
+                    <div class="nav flex-column nav-pills nav-pills-CustProf" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <a class="nav-link nav-link-CustProf active" id="v-pills-info-tab" data-toggle="pill" href="#v-pills-info" role="tab" aria-controls="v-pills-info" aria-selected="true">Information</a>
+                        <a class="nav-link nav-link-CustProf disabled" id="v-pills-address-tab" data-toggle="pill" href="#v-pills-address" role="tab" aria-controls="v-pills-address" aria-selected="false">Address</a>
+                    </div>
+                </div>
+                <div class="col-10">
+                    <div class="tab-content" id="v-pills-tabContent">
+                        <div class="tab-pane fade show active" id="v-pills-info" role="tabpanel" aria-labelledby="v-pills-info-tab">
+                            <div class="pb-2">
+                                <div>@Html.LabelFor(m=>m.CustCode,new { @class="pr-3"})<span style="color:red">*</span></div>
+                                <div class="w-100">@Html.TextBoxFor(m=>m.CustCode,new { @class="form-control"})</div>
+                                @Html.ValidationMessageFor(m=>m.CustCode,"", new{@class="text-danger"})
+                            </div>
+                            <div class="pb-2">
+                                <div>@Html.LabelFor(m=>m.CustName,new { @class="pr-3"})<span style="color:red">*</span></div>
+                                <div class="w-100">@Html.TextBoxFor(m=>m.CustName,new { @class="form-control"})</div>
+                                @Html.ValidationMessageFor(m=>m.CustName,"", new{@class="text-danger"})
+                            </div>
+
+                            <div class="row ">
+                                <div class="col-12 col-lg-6"> @Html.LabelFor(m=>m.ContactPS)<span style="color:red">*</span> </div>
+                                <div class="col-12 col-lg-6"> @Html.LabelFor(m=>m.ContactNo)<span style="color:red">*</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-lg-6"> @Html.TextBoxFor(m=>m.ContactPS,new { @class="form-control"})</div>
+                                <div class="col-12 col-lg-6"> @Html.TextBoxFor(m=>m.ContactNo,new { @class="form-control"})</div>
+                            </div>
+                            <div class="row pb-2">
+                                @Html.ValidationMessageFor(m=>m.ContactPS,"", new{@class="text-danger col-12 col-lg-6"})
+                                @Html.ValidationMessageFor(m=>m.ContactNo,"", new{@class="text-danger  col-12 col-lg-6"})
+                            </div>
+                            <div class="pb-2">
+                                <div>@Html.LabelFor(m=>m.Email,new { @class="pr-3"})<span style="color:red">*</span></div>
+                                <div class="w-100">@Html.TextBoxFor(m=>m.Email,new { @class="form-control"})</div>
+                                @Html.ValidationMessageFor(m=>m.Email,"", new{@class="text-danger"})
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="v-pills-address" role="tabpanel" aria-labelledby="v-pills-address-tab">
+                            <div class="pb-2">
+                                <div>@Html.LabelFor(m=>m.Add1,new { @class="pr-3"})<span style="color:red">*</span></div>
+                                <div class="w-100">@Html.TextBoxFor(m=>m.Add1,new { @class="form-control"})</div>
+                                @Html.ValidationMessageFor(m=>m.Add1,"", new{@class="text-danger"})
+                            </div>
+                            <div class="pb-2">
+                                <div>@Html.LabelFor(m=>m.Add2,new { @class="pr-3"})<span style="color:red">*</span></div>
+                                <div class="w-100">@Html.TextBoxFor(m=>m.Add2,new { @class="form-control"})</div>
+                                @Html.ValidationMessageFor(m=>m.Add2,"", new{@class="text-danger"})
+                            </div>
+                            <div class="pb-2">
+                                <div>@Html.LabelFor(m=>m.Add3,new { @class="pr-3"})</div>
+                                <div class="w-100">@Html.TextBoxFor(m=>m.Add3,new { @class="form-control"})</div>
+                                @Html.ValidationMessageFor(m=>m.Add3,"", new{@class="text-danger"})
+                            </div>
+                            <div class="row ">
+                                <div class="col-12 col-lg-6"> @Html.LabelFor(m=>m.Add4)</div>
+                                <div class="col-12 col-lg-6"> @Html.LabelFor(m=>m.PostCode)<span style="color:red">*</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-lg-6"> @Html.TextBoxFor(m=>m.Add4,new { @class="form-control"})</div>
+                                <div class="col-12 col-lg-6"> @Html.TextBoxFor(m=>m.PostCode,new { @class="form-control"})</div>
+                            </div>
+                            <div class="row pb-2">
+                                @Html.ValidationMessageFor(m=>m.Add4,"", new{@class="text-danger col-12 col-lg-6"})
+                                @Html.ValidationMessageFor(m=>m.PostCode,"", new{@class="text-danger  col-12 col-lg-6"})
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="row ">
-                <div class="col-12 col-lg-6"> @Html.LabelFor(m=>m.ContactPS)<span style="color:red">*</span> </div>
-                <div class="col-12 col-lg-6"> @Html.LabelFor(m=>m.ContactNo)<span style="color:red">*</span></div>
-            </div>
-            <div class="row">
-                <div class="col-12 col-lg-6"> @Html.TextBoxFor(m=>m.ContactPS,new { @class="form-control"})</div>
-                <div class="col-12 col-lg-6"> @Html.TextBoxFor(m=>m.ContactNo,new { @class="form-control"})</div>
-            </div>
-            <div class="row pb-2">
-                @Html.ValidationMessageFor(m=>m.ContactPS,"", new{@class="text-danger col-12 col-lg-6"})
-                @Html.ValidationMessageFor(m=>m.ContactNo,"", new{@class="text-danger  col-12 col-lg-6"})
-            </div>
-            <div class="pb-2">
-                <div>@Html.LabelFor(m=>m.Email,new { @class="pr-3"})<span style="color:red">*</span></div>
-                <div class="w-100">@Html.TextBoxFor(m=>m.Email,new { @class="form-control"})</div>
-                @Html.ValidationMessageFor(m=>m.Email,"", new{@class="text-danger"})
-            </div>
-            <div class="pb-2">
-                <div>@Html.LabelFor(m=>m.Add1,new { @class="pr-3"})<span style="color:red">*</span></div>
-                <div class="w-100">@Html.TextBoxFor(m=>m.Add1,new { @class="form-control"})</div>
-                @Html.ValidationMessageFor(m=>m.Add1,"", new{@class="text-danger"})
-            </div>
-            <div class="pb-2">
-                <div>@Html.LabelFor(m=>m.Add2,new { @class="pr-3"})<span style="color:red">*</span></div>
-                <div class="w-100">@Html.TextBoxFor(m=>m.Add2,new { @class="form-control"})</div>
-                @Html.ValidationMessageFor(m=>m.Add2,"", new{@class="text-danger"})
-            </div>
-            <div class="pb-2">
-                <div>@Html.LabelFor(m=>m.Add3,new { @class="pr-3"})</div>
-                <div class="w-100">@Html.TextBoxFor(m=>m.Add3,new { @class="form-control"})</div>
-                @Html.ValidationMessageFor(m=>m.Add3,"", new{@class="text-danger"})
-            </div>
-            <div class="row ">
-                <div class="col-12 col-lg-6"> @Html.LabelFor(m=>m.Add4)</div>
-                <div class="col-12 col-lg-6"> @Html.LabelFor(m=>m.PostCode)<span style="color:red">*</span></div>
-            </div>
-            <div class="row">
-                <div class="col-12 col-lg-6"> @Html.TextBoxFor(m=>m.Add4,new { @class="form-control"})</div>
-                <div class="col-12 col-lg-6"> @Html.TextBoxFor(m=>m.PostCode,new { @class="form-control"})</div>
-            </div>
-            <div class="row pb-2">
-                @Html.ValidationMessageFor(m=>m.Add4,"", new{@class="text-danger col-12 col-lg-6"})
-                @Html.ValidationMessageFor(m=>m.PostCode,"", new{@class="text-danger  col-12 col-lg-6"})
-            </div>
-           @* <div class="pb-2">
-                <div>@Html.LabelFor(m=>m.LicenseNo,new { @class="pr-3"})<span style="color:red">*</span></div>
-                <div class="w-100">@Html.TextBoxFor(m=>m.LicenseNo,new { @class="form-control"})</div>
-                @Html.ValidationMessageFor(m=>m.LicenseNo,"", new{@class="text-danger"})
-            </div>*@
+
+            @* <div class="pb-2">
+        <div>@Html.LabelFor(m=>m.LicenseNo,new { @class="pr-3"})<span style="color:red">*</span></div>
+        <div class="w-100">@Html.TextBoxFor(m=>m.LicenseNo,new { @class="form-control"})</div>
+        @Html.ValidationMessageFor(m=>m.LicenseNo,"", new{@class="text-danger"})
+        </div>*@
         </div>
 
 
@@ -76,5 +94,84 @@
 
 
 <script>
-    
+    $('#v-pills-tab a').on('click', function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    })
+
+    $('#btnAddEdit').click(function (e) {
+        e.preventDefault();
+
+        var form = $("#AddEditCustProfModal").find('form');
+        var actionUrl = form.attr('action');
+        var dataToSend = form.serialize();
+        $.validator.unobtrusive.parse(form);
+        form.validate();
+        if (form.valid()) {
+            $.ajax({
+                url: actionUrl + "?queryType=I",
+                type: "POST",
+                data: dataToSend,
+                beforeSend: function () {
+
+                },
+                success: function (result) {
+                    if (result.success) {
+                        $("#AddEditCustProfModal").modal('hide');
+                        swal("", "Customer Profile Created Successfully!", "success");
+                        $('#btnCustProfSearch').trigger('click');
+
+                    }
+                    else if (!result.success && result.message != null) {
+                        swal("", result.message, "error");
+                    }
+                },
+                error: function (xhr, status, error) {
+                },
+                complete: function () {
+                },
+
+            });
+        }
+
+    });
+
+    $('#btnNext').click(function (e) {
+        e.preventDefault();
+        var form = $("#AddEditCustProfModal").find('form');
+        var actionUrl = form.attr('action');
+        var dataToSend = form.serialize();
+        $.validator.unobtrusive.parse(form);
+        form.validate();
+        if (form.valid()) {
+            $('.nav-pills-CustProf .active').next('a').trigger('click');
+            if ($('.nav-pills-CustProf .active').next().length == 0) {
+
+                $('#btnNext').removeClass('d-block');
+                $('#btnNext').addClass('d-none');
+                $('#btnAddEdit').removeClass('d-none');
+                $('#btnAddEdit').addClass('d-block');
+            }
+        }
+
+    });
+
+    $('.nav-link-CustProf').on('click', function (e) {
+        e.preventDefault();
+        var tab = e.target.innerHTML;
+
+        if (tab != 'Address') {
+            $('#btnNext').removeClass('d-none');
+            $('#btnNext').addClass('d-block');
+            $('#btnAddEdit').removeClass('d-block');
+            $('#btnAddEdit').addClass('d-none');
+        }
+        else {
+            $('#btnNext').removeClass('d-block');
+            $('#btnNext').addClass('d-none');
+            $('#btnAddEdit').removeClass('d-none');
+            $('#btnAddEdit').addClass('d-block');
+        }
+            
+    });
 </script>

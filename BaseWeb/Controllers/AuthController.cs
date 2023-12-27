@@ -1,7 +1,9 @@
 ﻿using BaseWeb.Cores;
 using BaseWeb.DAL;
+using BaseWeb.Models;
 using BaseWeb.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Data;
 
 namespace BaseWeb.Controllers
@@ -10,13 +12,13 @@ namespace BaseWeb.Controllers
     {
         public IActionResult Login()
         {
-            if (HttpContext.Session.GetString("UserName") == null)
+            if (WebSession.GetSession(EnumSession.UserName) == null)
             {
                 return View();
             }
             else
             {
-                return RedirectToAction(controllerName:"Home",actionName:"Index");
+                return RedirectToAction(controllerName:"ProcessingList",actionName:"Index");
             }
         }
         [HttpPost]
@@ -35,12 +37,11 @@ namespace BaseWeb.Controllers
             }
             else
             {
-                storeSession(userLogin);
-                
+                storeInitSession(userLogin.LoginId);
             }
 
 
-            return RedirectToAction(controllerName: "Home", actionName: "Index");
+            return RedirectToAction(controllerName: "ProcessingList", actionName: "Index");
         }
 
         public IActionResult Logout()
@@ -81,12 +82,11 @@ namespace BaseWeb.Controllers
             return true;
         }
 
-
-        private void storeSession(UserLoginViewModel userLogin)
+        private void storeInitSession(string LoginId)
         {
-            HttpContext.Session.SetString("UserName", userLogin.LoginId);
+            WebSession.storeSession(EnumSession.UserName, LoginId);
+            WebSession.storeSession(EnumSession.ImportPath, @"..\BaseWeb\Files\Import\");
+            WebSession.storeSession(EnumSession.ExportPath, @"..\BaseWeb\Files\Export\");
         }
-
-
     }
 }

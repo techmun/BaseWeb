@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿
+using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace BaseWeb.Cores
@@ -10,10 +11,10 @@ namespace BaseWeb.Cores
             constr = _constr;
         }
 
-        public DataTable toDataTabe(MySqlCommand cmd)
+        public DataTable toDataTabe(SqlCommand cmd)
         {
             var dataTable = new DataTable();
-            using (var connection = new MySqlConnection(constr))
+            using (var connection = new SqlConnection(constr))
             {
                 connection.Open();
                 cmd.Connection = connection;

@@ -43,5 +43,17 @@ namespace BaseWeb.Utilities
                 }
             }
         }
+
+        public class DeleteFileAttribute : ActionFilterAttribute
+        {
+            public override void OnResultExecuted(ResultExecutedContext filterContext)
+            {
+                var filePathResult = filterContext.Result as FileResult;
+                if (filePathResult != null)
+                {
+                    System.IO.File.Delete(filePathResult.FileDownloadName);
+                }
+            }
+        }
     }
 }

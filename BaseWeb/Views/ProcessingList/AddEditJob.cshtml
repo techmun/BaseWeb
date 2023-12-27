@@ -1,0 +1,300 @@
+﻿@{
+    Layout = "";
+}
+
+@Html.Hidden("hfSelCust","")
+<div>Select Customer Profile</div>
+<div class="row">
+    <div class="col-8">
+        <div class="inline">
+            <div class="input-icons">
+                <i id="SearchIcon" class="fa fa-magnifying-glass icon"></i>
+                <input placeholder="Type to Search..." autocomplete="off" class="form-control" id="txtSearchCustProf" />
+            </div>
+        </div>
+    </div>
+
+    @*<div class="col-2">
+    <button class="btn btn-info w-100 h-100" id="btnCustProfSearch" value="Search">Search</button>
+    </div>*@
+    @*<div class="col-2">
+    <button class="btn btn-info w-100 h-100" id="btnAddCustProf" value="Search">Add New</button>
+    </div>*@
+
+    <div class="p-3">
+        <button class="btn btn-primary mb-2 rounded-oval" id="btnAddNewJob"><i class="fa-solid fa-plus px-1"></i></>Add Job</button>
+    </div>
+
+    <div id="JobList" style="max-height:400px;overflow:auto;"></div>
+    @*<div class="row pb-5" id="guid">
+    <div class="col-4">
+    <div>Government Department</div>
+    <select class="form-control ddlGovDept">
+    <option></option>
+    </select>
+    </div>
+    <div class="col-4">
+    <div>Service</div>
+    <select class="form-control ddlServices" disabled>
+    <option></option>
+    </select>
+    </div>
+    </div>*@
+    @* <div>
+    <table id="CheckListGrid"></table>
+    </div>*@
+</div>
+
+<div class="modal fade" id="ViewCLModal" tabindex="-1" role="dialog" aria-labelledby="ViewCLModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ViewCLModalLabel">CheckList</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <table id="CheckListGrid"></table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var mcList = [];
+    var govList = [];
+    var serList = [];
+    $(document).ready(function () {
+        $.ajax({
+            dataType: "json",
+            type: 'Get',
+            url: "/ProcessingList/InitLoad",
+            success: function (result) {
+                govList = result.govList;
+                serList = result.serList;
+
+                //$.each(govList, function (i, e) {
+                //    $('.ddlGovDept').append('<option>' + e + '</option>');
+                //});
+            }
+        });
+    });
+
+    $('#JobList').on('change', '.ddlGovDept', function (e) {
+        var selval = e.target.value;
+        var ddlServices = $(this).closest('.col-4').next().find('.ddlServices').first();
+        ddlServices.html('<option></option>');
+        //$.jgrid.gridUnload("CheckListGrid");
+        if (selval != '') {
+
+            ddlServices.prop('disabled', false);
+            var selSerList = serList.filter(m => m.govDept == selval);
+            $.each(selSerList, function (i, e) {
+                ddlServices.append('<option value="' + e.serID + '">' + e.serName + '</option>');
+            });
+        } else {
+            ddlServices.prop('disabled', true);
+        }
+    });
+
+    $('#JobList').on('change', '.ddlServices', function (e) {
+        var selval = e.target.value;
+        var hfSelService = $(this).closest('.col-4').prevAll('.hfSelService').first();
+        var ViewCheckList = $(this).closest('.col-4').next('.ViewCheckList').first();
+        console.log(ViewCheckList)
+        hfSelService.val(selval);
+        ViewCheckList.append('<button class="btn btn-success rounded-oval" style="position:absolute;top:50%;" onclick="loadCheckListGrid(\'' + selval + '\')" ><i class="fa-solid fa-list-check" style="padding-right:5px"></i></>View</button>')
+    });
+
+    var columns = [
+        { name: 'CompName', width: '250px' },
+        { name: 'ContactName', width: '200px' },
+        { name: 'ContactNo', width: '100px' }
+    ];
+
+    $("#txtSearchCustProf").mcautocomplete({
+
+        columns: columns,
+        loading: true,
+        search: function (e, u) {
+            $('#SearchIcon').removeClass('fa-magnifying-glass');
+            $('#SearchIcon').addClass('fa-spinner fa-spin');
+        },
+        response: function (e, u) {
+
+            $('#SearchIcon').removeClass('fa-spinner fa-spin');
+            $('#SearchIcon').addClass('fa-magnifying-glass');
+        },
+        source: function (request, response) {
+            $.ajax({
+                dataType: "json",
+                type: 'Get',
+                url: "/CustomerProfile/GetCustProfList?filter=" + encodeURIComponent($('#txtSearchCustProf').val()),
+                global: false,
+                success: function (result) {
+                    mcList = [];
+                    if (result.success) {
+                        var objlist = $.parseJSON(result.lsCustProf);
+                        $.each(objlist, function (i, e) {
+                            var arr = Object.keys(e).map(function (key) { return e[key]; });
+                            mcList.push(arr);
+
+                        });
+                        response(mcList);
+                    }
+                    else {
+                        swal("", result.message, "error");
+                    }
+                },
+                error: function (data) {
+                }
+            });
+        },
+        minLength: 3,
+        select:
+            function (event, ui) {
+                var result_text = (ui.item)
+                    ? ui.item[0] + ', ' + ui.item[1] + ', ' + ui.item[2]
+                    : '';
+
+                this.value = ui.item ? ui.item[0] : '';
+                $('#hfSelCust').val(ui.item[3]);
+                return false;
+            },
+
+
+    });
+
+    function loadCheckListGrid(SerCode) {
+        $.jgrid.gridUnload("CheckListGrid");
+        $("#ViewCLModal").modal('show');
+        $("#CheckListGrid").jqGrid({
+            url: "/ProcessingList/loadCheckListByCode?code=" + SerCode,
+            datatype: "json",
+            colNames: ['Documents', 'Client', 'Runner'],
+            colModel: [
+                { name: 'document', index: "document", width: 650 },
+                { name: 'Client', index: "Client", width: 80, align: 'center', formatter: PbClient },
+                { name: 'Runner', index: "Runner", width: 80, align: 'center', formatter: PbRunner },
+            ],
+            loadComplete: function (data) {
+            },
+            height: '400',
+            rowNum: -1,
+        });
+    }
+
+    function PbClient(cellvalue, options, rowObject) {
+        var PreparedBy = "";
+        if (rowObject.preparedBy == "C") {
+            PreparedBy = "<i class='fa-solid fa-check'style='color:#00f01c'></i>"
+        }
+        return PreparedBy
+    }
+    function PbRunner(cellvalue, options, rowObject) {
+        var PreparedBy = "";
+        if (rowObject.preparedBy == "R") {
+            PreparedBy = "<i class='fa-solid fa-check'style='color:#00f01c'></i>"
+        }
+        return PreparedBy
+    }
+
+    $('#btnAddNewJob').on('click', function (e) {
+        var guid = uuidv4();
+        var innerHTML = '';
+        innerHTML += '<div class="row pb-2" id = "' + guid + '">';
+        innerHTML += '<input type="hidden" class="hfSelService"/>'
+        innerHTML += '<div class="col-1 text-center" style="position:relative">';
+        innerHTML += '<i class="fa-solid fa-trash-can" style="position:absolute;top:50%;color:red;cursor:pointer" onclick="deleteCL(\'' + guid + '\')"></i>';;
+        innerHTML += '</div>';
+        innerHTML += '<div class="col-4">';
+        innerHTML += '<div class="d-none d-lg-block">Government Department</div>';
+        innerHTML += '<div class="d-block d-lg-none">Gov Dept</div>';
+        innerHTML += '<select class="form-control ddlGovDept">';
+        innerHTML += '<option></option>';
+        innerHTML += '</select>';
+        innerHTML += '</div>';
+        innerHTML += '<div class="col-4">';
+        innerHTML += '<div>Service</div>';
+        innerHTML += '<select class="form-control ddlServices" disabled>';
+        innerHTML += '<option></option>';
+        innerHTML += '</select>';
+        innerHTML += '</div>';
+        innerHTML += '<div class="col-3 ViewCheckList" style="position:relative">';
+        innerHTML += '</div>';
+        innerHTML += '</div>';
+        $('#JobList').append(innerHTML)
+
+        $.each(govList, function (i, e) {
+            $('#' + guid).find('.ddlGovDept').append('<option>' + e + '</option>');
+        });
+    })
+
+    function uuidv4() {
+        return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+    }
+
+    function deleteCL(guid) {
+        $("#" + guid).remove();
+    }
+
+    $('#btnAddEditJob').on('click', function () {
+        var selComp = $('#hfSelCust').val();
+        var jobList =[];
+        var proceed = true;
+        
+        if (selComp == '') {
+            swal('', 'Please select Customer profile', 'warning');
+            return;
+        } else if ($('#JobList .hfSelService').length == 0) {
+            swal('', 'Please add job', 'warning');
+            return;
+        } else {
+            $('#JobList .hfSelService').each(function (i, e) {
+                if (e.value == ''){
+                    swal('', 'Please add job', 'warning');
+                    proceed = false;
+                    return;
+                }else{
+                    jobList.push(e.value);
+                }
+            })
+        }
+
+        if (!proceed){
+            return;
+        }
+        var data = { selComp: selComp, jobList: jobList.toString(),queryType:'I' };
+        $.ajax({
+            url: "/ProcessingList/AddEditJob",
+            type: "POST",
+            data: data,
+            beforeSend: function () {
+
+            },
+            success: function (result) {
+                if (result.success) {
+                    $("#AddEditJobModal").find(".modal-body").html('');
+                    $("#AddEditJobModal").modal('hide');
+                    swal("", "Customer Profile Created Successfully!", "success");
+
+                }
+                else if (!result.success && result.message != null) {
+                    swal("", result.message, "error");
+                }
+            },
+            error: function (xhr, status, error) {
+            },
+            complete: function () {
+            },
+
+        });
+    });
+</script>

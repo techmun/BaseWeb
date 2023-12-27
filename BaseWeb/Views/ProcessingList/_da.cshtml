@@ -7,11 +7,11 @@
     </div>
 </div>
 
-<div class="modal fade" id="AddEditDAModal" tabindex="-1" role="dialog" aria-labelledby="AddEditDAModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+<div class="modal fade" id="AddEditJobModal" tabindex="-1" role="dialog" aria-labelledby="AddEditJobModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="AddEditDAModalLabel"></h5>
+                <h5 class="modal-title" id="AddEditJobModalLabel"></h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -19,7 +19,7 @@
             <div class="modal-body h-100 w-100">
             </div>
             <div class="modal-footer">
-                <button type="button" id="btnAddEditDA" class="btn btn-primary">Save changes</button>
+                <button type="button" id="btnAddEditJob" class="btn btn-primary">Save changes</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -60,7 +60,8 @@
             <div class="modal-body h-100 w-100">
             </div>
             <div class="modal-footer">
-                <button type="button" id="btnAddEditCust" class="btn btn-primary">Save changes</button>
+                <button type="button" id="btnNext" class="btn btn-primary">Next</button>
+                <button type="button" id="btnAddEdit" class="btn btn-primary d-none">Save changes</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -71,8 +72,7 @@
         loadDAGrid();
     });
 
-    function loadDAGrid(){
-        var ls = [{ CompName: "abc sdn bhd", LicenseNo: "k12374215372", JobType: "MBSJ - LICENSE - KEDAI" }];
+    function loadDAGrid(ls){
         $("#daGrid").jqGrid({
             datatype: "local",
             data: ls,
@@ -92,9 +92,6 @@
     }
 
     function editDA(cellvalue, options, rowObject) {
-        console.log(cellvalue)
-        console.log(options)
-        console.log(rowObject)
 
         var innerhtml = '<i class="fa-solid fa-pencil gridIcon" style="color:#28e010" onclick="btnEditDA()"></i>';
         
@@ -126,14 +123,14 @@
 
     $('#btnAddDA').on('click', function () {
 
-        $('#AddEditDAModalLabel').text('Add Data Allocate');
+        $('#AddEditJobModalLabel').text('Add Data Allocate');
         $('#btnAddEditCust').text('Create');
         $.ajax({
             type: "GET",
-            url: "/ProcessingList/AddEditDA?type=I",
+            url: "/ProcessingList/AddEditJob?type=I",
             success: function (result) {
-                $("#AddEditDAModal").find(".modal-body").html(result);
-                $("#AddEditDAModal").modal('show');
+                $("#AddEditJobModal").find(".modal-body").html(result);
+                $("#AddEditJobModal").modal('show');
             }
         });
     });
@@ -149,6 +146,8 @@
                 url: actionUrl + "?queryType=I",
                 type: "POST",
                 data: dataToSend,
+                contentType: "application/json",
+                dataType: "json",
                 beforeSend: function () {
 
                 },
@@ -169,5 +168,13 @@
             });
         }
 
+    });
+
+    $("#AddEditCustProfModal").on("hidden.bs.modal", function () {  //reset popup
+        $('#btnNext').removeClass('d-none');
+        $('#btnNext').addClass('d-block');
+        $('#btnAddEdit').removeClass('d-block');
+        $('#btnAddEdit').addClass('d-none');
+        $("#AddEditCustProfModal").find(".modal-body").html('');
     });
 </script>

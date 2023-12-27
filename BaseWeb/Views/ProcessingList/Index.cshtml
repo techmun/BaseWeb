@@ -1,21 +1,196 @@
-﻿
-@{
-
+﻿@{
     ViewData["Title"] = "Processing List";
 }
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-    <li class="nav-item" role="presentation">
-        <button class="nav-link active px-5" id="dataAllocate-tab" data-bs-toggle="tab" data-bs-target="#dataAllocate" type="button" role="tab" aria-controls="home" aria-selected="true">DA</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link  px-5" id="fireExting-tab" data-bs-toggle="tab" data-bs-target="#fireExting" type="button" role="tab" aria-controls="profile" aria-selected="false">FE</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link  px-5" id="pestControl-tab" data-bs-toggle="tab" data-bs-target="#pestControl" type="button" role="tab" aria-controls="contact" aria-selected="false">PC</button>
-    </li>
-</ul>
-<div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active pb-5" id="dataAllocate" role="tabpanel" aria-labelledby="da-tab">@Html.Partial("_da")</div>
-    <div class="tab-pane fade" id="fireExting" role="tabpanel" aria-labelledby="fe-tab">coming soon</div>
-    <div class="tab-pane fade" id="pestControl" role="tabpanel" aria-labelledby="pc-tab">coming soon</div>
+@model List<BaseWeb.ViewModels.ProcListViewModel>
+
+<div>
+    <div class="btn-toolbar mb-5" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group me-3 mb-2" role="group" aria-label="Add group">
+            <button class="btn btn-primary" id="btnAddJob"><i class="fa-solid fa-plus px-1"></i>Add Job</button>
+        </div>
+        <div class="btn-group me-3" role="group" aria-label="Search Group">
+            <input type="text" class="form-control" autocomplete="off" placeholder="Search..." id="txtJobSearch" />
+            <button class="btn btn-primary" id="btnJobSearch" value="Search"><i class="fa fa-magnifying-glass icon px-1"></i>Search</button>
+        </div>
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 g-4 JobList px-3 pb-5" id="JobCardList">
+        @foreach(var item in Model)
+        {
+            <div class="col" >
+                @Html.Hidden(item.CustCode)
+                <div class="card border-success clickable-card h-100" onclick="ProcessJob('@item.CustCode')">
+                    <div class="card-header bg-transparent border-success">@item.CustName</div>
+                    <div class="card-body">
+                        <h5 class="card-title">Job List</h5>
+                        @foreach(var ser in item.services)
+                        {
+                            <p class="card-text">@(ser.GovDept + "-"+ser.SerName)</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    @*<div>
+    <table id="daGrid"></table>
+    <div id="tblDAGridPager" style="text-align:center"> </div>
+    </div>*@
 </div>
+
+<div class="modal fade" id="AddEditJobModal" tabindex="-1" role="dialog" aria-labelledby="AddEditJobModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddEditJobModalLabel"></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body h-100 w-100">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnAddEditJob" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="CheckListModal" tabindex="-1" role="dialog" aria-labelledby="CheckListModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="CheckListModalLabel">CheckList</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body h-100 w-100">
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">NRIC</label>
+                    <input class="form-control" type="file" id="formFile">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnAddEditCheckList" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="AddEditCustProfModal" tabindex="-1" role="dialog" aria-labelledby="AddEditCustProfModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddEditCustProfModalLabel"></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body h-100 w-100">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnNext" class="btn btn-primary">Next</button>
+                <button type="button" id="btnAddEdit" class="btn btn-primary d-none">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var procList = [];
+    var procCount = 0;
+    $(document).ready(function () {
+
+    });
+
+
+    //function editJob(cellvalue, options, rowObject) {
+
+    //    var innerhtml = '<i class="fa-solid fa-pencil gridIcon" style="color:#28e010" onclick="btnEditJob()"></i>';
+
+    //    return innerhtml;
+    //}
+
+    //function delJob(cellvalue, options, rowObject) {
+    //    var innerhtml = '<i class="fa-solid fa-trash-can gridIcon" style="color:#de1212" onclick="btnDelJob()"></i>';
+    //    return innerhtml;
+    //}
+
+    //function ListJob(cellvalue, options, rowObject) {
+    //    var innerhtml = '<i class="fa-regular fa-clipboard-list gridIcon" style="color:#0080ff" onclick="btnListJob()"></i>';
+    //    return innerhtml;
+    //}
+
+    function btnEditJob() {
+
+        console.log("Edit");
+    }
+
+    function btnDelJob() {
+        console.log("del");
+    }
+
+    function btnListJob() {
+        $("#CheckListModal").modal('show');
+    }
+
+    $('#btnAddJob').on('click', function () {
+
+        $('#AddEditJobModalLabel').text('Add Data Allocate');
+        $('#btnAddEditCust').text('Create');
+        $.ajax({
+            type: "GET",
+            url: "/ProcessingList/AddEditJob?type=I",
+            success: function (result) {
+                $("#AddEditJobModal").find(".modal-body").html(result);
+                $("#AddEditJobModal").modal('show');
+            }
+        });
+    });
+    $('#btnAddEditCust').click(function () {
+
+        var form = $("#AddEditCustProfModal").find('form');
+        var actionUrl = form.attr('action');
+        var dataToSend = form.serialize();
+        $.validator.unobtrusive.parse(form);
+        form.validate();
+        if (form.valid()) {
+            $.ajax({
+                url: actionUrl + "?queryType=I",
+                type: "POST",
+                data: dataToSend,
+                beforeSend: function () {
+
+                },
+                success: function (result) {
+                    if (result.success) {
+                        $("#AddEditCustProfModal").modal('hide');
+                        swal("", "Customer Profile Created Successfully!", "success");
+                        $('#btnCustProfSearch').trigger('click');
+
+                    }
+                    else if (!result.success && result.message != null) {
+                        swal("", result.message, "error");
+                    }
+                },
+                complete: function () {
+                },
+
+            });
+        }
+
+    });
+
+    $("#AddEditCustProfModal").on("hidden.bs.modal", function () {  //reset popup
+        $('#btnNext').removeClass('d-none');
+        $('#btnNext').addClass('d-block');
+        $('#btnAddEdit').removeClass('d-block');
+        $('#btnAddEdit').addClass('d-none');
+        $("#AddEditCustProfModal").find(".modal-body").html('');
+    });
+
+    function ProcessJob(custCode){
+        window.location.href = '@Url.Action("ProcessJob")?custCode=' + encodeURIComponent(custCode);
+    }
+</script>

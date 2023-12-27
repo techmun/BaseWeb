@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Doc Allocate";
+}
+
+<div>
+    <div class="btn-toolbar mb-5" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group me-3" role="group" aria-label="Add group">
+            <button class="btn btn-primary" id="btnAddDocAllocate"><i class="fa-solid fa-plus px-1"></i></>Add</button>
+            <label for="DocAllocateFiles" class="btn btn-primary btn-label"><i class="fa-solid fa-upload px-1"></i><span>Import</span></label>
+            <input id="DocAllocateFiles" style="visibility:hidden;display:none;" type="file" onchange="uploadDocAllocate('DocAllocateFiles')">
+            <button class="btn btn-primary" id="btnExpCustProf"><i class="fa-solid fa-download px-1"></i></>Export</button>
+        </div>
+        <div class="btn-group me-3" role="group" aria-label="Search Group">
+            <input type="text" class="form-control" autocomplete="off" placeholder="Search..." id="txtSearchCustProf" />
+            <button class="btn btn-primary" id="btnCustProfSearch" value="Search"><i class="fa fa-magnifying-glass icon px-1"></i>Search</button>
+        </div>
+    </div>
+</div>
+<script>
+    function uploadDocAllocate(inputId) {
+        
+        var input = document.getElementById(inputId);
+        var files = input.files;
+        var formData = new FormData();
+        for (var i = 0; i != files.length; i++) {
+            formData.append("files", files[i]);
+        }
+        $.ajax(
+            {
+                url: "/DocAllocate/ImportDA",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function (result) {
+                    if(result.success){
+
+                        $('#DocAllocateFiles').val('');
+                        swal('', 'Files Uploaded!', 'success');
+                    }else{
+                        $('#DocAllocateFiles').val('');
+                        swal('', result.msg, 'error');
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('#DocAllocateFiles').val('')
+                }
+            }
+        );
+    }
+</script>

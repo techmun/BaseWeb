@@ -7,12 +7,11 @@
 
     <link rel="stylesheet" href="~/BaseWeb.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link href="~/lib/jqgrid/css/ui.jqgrid-bootstrap5.css" rel="stylesheet" />
-    <link href="~/lib/jqueryui/themes/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/lib/jqueryui/themes/base/jquery-ui.min.css" rel="stylesheet" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jqgrid/js/jquery.jqgrid.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="~/lib/jqueryui/jquery-ui.js"></script>
+    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <link href="~/fontawesome/css/fontawesome.css" rel="stylesheet" />
     <link href="~/fontawesome/css/brands.css" rel="stylesheet" />
@@ -23,96 +22,131 @@
     <script src="~/bootstrap-sweetalert/sweetalert.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.mcautocomplete.js"></script>
+    <link href="~/lib/jqgrid/css/ui.jqgrid-bootstrap5.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
+    <script src="~/lib/moment.js/moment.min.js"></script>
+    <script src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 </head>
 <body>
-    @*<header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <header class=" d-lg-none d-block nav-col">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BaseWeb</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                    <span class="navbar-toggler-icon" style="color:white"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link nav-d text-white" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fa-solid fa-inbox fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Dashboard</span>
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link nav-d text-white" asp-area="" asp-controller="ProcessingList" asp-action="Index">
+                                <i class="fa-solid fa-square-poll-horizontal fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Processing List</span>
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Logout">Logout</a>
+                            <a class="nav-link nav-d text-white" asp-area="" asp-controller="CustomerProfile" asp-action="Index">
+                                <i class="fa-solid fa-user fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Customer Profile</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-d text-white" asp-area="" asp-controller="DocAllocate" asp-action="Index">
+                                <i class="fa-solid fa-file-lines fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Doc Allocate</span>
+                            </a>
+                        </li>
+                        @*<li class="nav-item">
+                        <a class="nav-link nav-d text-white" asp-area="" asp-controller="Setting" asp-action="Index">
+                        <i class="fa-solid fa-fire-extinguisher fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Fire Extingusher</span>
+                        </a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link nav-d text-white" asp-area="" asp-controller="Setting" asp-action="Index">
+                        <i class="fa-solid fa-bug fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Pest Control</span>
+                        </a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link nav-d text-white" asp-area="" asp-controller="Setting" asp-action="Index">
+                        <i class="fa-solid fa-gears fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Setting</span>
+                        </a>
+                        </li>*@
+                        <li class="nav-item">
+                            <a class="nav-link nav-d text-white" asp-area="" asp-controller="Auth" asp-action="Logout">
+                                <i class="fa-solid fa-arrow-right-from-bracket fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Logout</span>
+                            </a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-    </header>*@
-    <div class="container w-100">
+    </header>
+    <div class="mainpage">
         <div class="main">
             <div class="row">
-                <div class="col-1 col-lg-3 vh-100">
+                <div class="col-0 col-lg-2 vh-100 d-none d-lg-block nav-col">
                     <div style="height:250px;">
                     </div>
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between p-5">
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between p-3">
                         <ul class="navbar-nav side-nav-bar flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link nav-d text-dark" asp-area="" asp-controller="Home" asp-action="Index">
-                                    <i class="fa-solid fa-square-poll-horizontal fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Dashboard</span>
+                                <a class="nav-link nav-d text-white" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="fa-solid fa-inbox fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Dashboard</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link nav-d text-dark" asp-area="" asp-controller="ProcessingList" asp-action="Index">
+                                <a class="nav-link nav-d text-white" asp-area="" asp-controller="ProcessingList" asp-action="Index">
                                     <i class="fa-solid fa-square-poll-horizontal fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Processing List</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link nav-d text-dark" asp-area="" asp-controller="CustomerProfile" asp-action="Index">
+                                <a class="nav-link nav-d text-white" asp-area="" asp-controller="CustomerProfile" asp-action="Index">
                                     <i class="fa-solid fa-user fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Customer Profile</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link nav-d text-dark" asp-area="" asp-controller="Setting" asp-action="Index">
+                                <a class="nav-link nav-d text-white" asp-area="" asp-controller="DocAllocate" asp-action="Index">
                                     <i class="fa-solid fa-file-lines fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Doc Allocate</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link nav-d text-dark" asp-area="" asp-controller="Setting" asp-action="Index">
-                                    <i class="fa-solid fa-fire-extinguisher fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Fire Extingusher</span>
-                                </a>
+                            @* <li class="nav-item">
+                            <a class="nav-link nav-d text-white" asp-area="" asp-controller="Setting" asp-action="Index">
+                            <i class="fa-solid fa-fire-extinguisher fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Fire Extingusher</span>
+                            </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link nav-d text-dark" asp-area="" asp-controller="Setting" asp-action="Index">
-                                    <i class="fa-solid fa-bug fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Pest Control</span>
-                                </a>
+                            <a class="nav-link nav-d text-white" asp-area="" asp-controller="Setting" asp-action="Index">
+                            <i class="fa-solid fa-bug fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Pest Control</span>
+                            </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link nav-d text-dark" asp-area="" asp-controller="Setting" asp-action="Index">
-                                    <i class="fa-solid fa-gears fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Setting</span>
-                                </a>
-                            </li>
+                            <a class="nav-link nav-d text-white" asp-area="" asp-controller="Setting" asp-action="Index">
+                            <i class="fa-solid fa-gears fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Setting</span>
+                            </a>
+                            </li>*@
                             <li class="nav-item">
-                                <a class="nav-link nav-d text-dark" asp-area="" asp-controller="Auth" asp-action="Logout">
+                                <a class="nav-link nav-d text-white" asp-area="" asp-controller="Auth" asp-action="Logout">
                                     <i class="fa-solid fa-arrow-right-from-bracket fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Logout</span>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class=" col-10 col-lg-9">
-                    <div style="height:50px"></div>
-                    <div class="h2 align-text-bottom pb-5">
-                        @ViewData["Title"]
+                <div class=" col-12 col-lg-10 body-col">
+                    <div class="container">
+                        <div class="h1 align-text-bottom title-font pt-5 pb-5 border-bottom">
+                            @ViewData["Title"]
+                        </div>
+                        <main role="main" class="pb-2 pt-5">
+                            @RenderBody()
+                        </main>
                     </div>
-                    <main role="main" class="pb-2">
-                        @RenderBody()
-                    </main>
                 </div>
             </div>
         </div>
     </div>
-    
     <script>
         $(function ($) {
             let url = window.location.href;
@@ -125,17 +159,17 @@
 
         $(document).on("ajaxStart", function () {
             $('.loader').show();
-        }); 
-        
+        });
+
         $(document).on("ajaxStop", function () {
             $('.loader').hide();
         })
     </script>
 
     @*<footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - BaseWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <div class="container">
+    &copy; 2023 - BaseWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
     </footer>*@
     @await RenderSectionAsync("Scripts", required: false)
 </body>

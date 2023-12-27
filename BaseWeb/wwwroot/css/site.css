@@ -1,3 +1,22 @@
+:root {
+    --body-color: #36756b;
+    --primary-bg-color: #ff5a34;
+    --secondary-bg-color: #2b1306;
+    --shaded-bg-color: #e3e3e3;
+    --shaded-border: 1px solid #e3e3e3;
+    --nav-bg-color: #2F4858;
+    --body-bg-color: #f5fbff;
+    --title-color: #3d6444;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: grey;
+    border-radius: 10px;
+}
 
 html {
     font-size: 14px;
@@ -12,15 +31,26 @@ html {
 html {
     position: relative;
     min-height: 100%;
+    overflow:hidden;
 }
 
 body {
     margin-bottom: 60px;
-    overflow:hidden;
+    overflow: hidden;
 }
 
-.gridIcon{
-    cursor:pointer;
+.rounded-oval{
+    border-radius:75px;
+}
+.mainpage {
+}
+.gridIcon {
+    cursor: pointer;
+}
+
+.title-font {
+    color: var(--title-color);
+    font-weight: 700;
 }
 
 .textbox-bordered {
@@ -36,6 +66,18 @@ body {
     border-bottom: 1px solid #ced4da;
     border-radius: 0;
 }
+
+.JobList{
+    height:600px;
+    overflow-y:auto;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.JobList::-webkit-scrollbar {
+    display: none;
+}
+
 
 input.input-validation-error,
 textarea.input-validation-error,
@@ -69,18 +111,88 @@ select.input-validation-error {
 
 .side-nav-bar .nav-item.active a {
     color: white !important;
-    background-color: #2b1306;
+    background-color: var(--secondary-bg-color);
     border-radius: 50px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .side-nav-bar .nav-item.active a span {
     font-size: 20px !important;
-    font-weight:300 !important;
+    font-weight:400 !important;
 }
 
-.side-nav-bar .nav-item:hover {
-    background-color: #e3e3e3;
-    border-radius: 50px;
+.form-control{
+    font-size:14px;
+}
+
+.input-icons i {
+    position: absolute;
+    top: 10px;
+    left: auto;
+    right: 10px
+}
+.inline {
+    display: inline-block;
+    position: relative;
+    width:100%;
+}
+
+.btn-group{
+    max-width: 100%;
+}
+
+.btn-group > .btn:not(:last-child):not(.dropdown-toggle) {
+    margin-right: 2px;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    color: #3f3f3f !important;
+}
+.nav-tabs .nav-link.active {
+    border-bottom: 2px solid #ff5a34 !important;
+    color: #3d6444 !important;
+    font-weight: 500;
+}
+.nav-col {
+    box-shadow: rgba(0, 0, 0, 0.25) 25px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 2px 0px 5px;
+    z-index:1;
+    background: var(--nav-bg-color);
+}
+
+.body-col {
+    background: var(--body-bg-color);
+}
+
+.btn-label{
+    display:flex;
+    align-items:center;
+}
+
+.ddlGovDept, .ddlServices{
+    cursor:pointer;
+}
+
+.ddlServices:disabled{
+     cursor:not-allowed;
+}
+
+.ui-autocomplete{
+    max-height:150px;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
+.ui-state-active {
+    border: none !important;
+    margin: 0 !important;
+    background: #354432 !important;
+}
+
+.clickable-card:hover {
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    cursor:pointer;
+    scale:1.01;
 }
 /*sm*/
 @media (min-width: 576px) {
@@ -147,33 +259,32 @@ ul.ui-autocomplete {
 
 .ui-jqgrid-hbox {
     padding-left: 10px;
-}    
+}
 
 .ui-jqgrid-view {
-    outline: 1px solid #e3e3e3 !important;
+    outline: var(--shaded-border) !important;
 }
 .ui-jqgrid-hdiv .ui-state-default {
-    border-bottom: 1px solid #e3e3e3 !important;
+    border-bottom: var(--shaded-border) !important;
     height: 40px;
 }
 .ui-jqgrid-pager {
-    outline: 1px solid #e3e3e3 !important;
+    outline: var(--shaded-border) !important;
     background: #fff !important;
 }
-
 
 table.ui-jqgrid-btable {
 }
 
 .ui-row-ltr td{
-    padding-left: 10px
+    padding-left: 10px;
+    cursor:pointer;
 }
 .ui-jqgrid .ui-pg-input{
     width:25px
 }
 
 .ui-jqgrid .ui-jqgrid-bdiv {
-    overflow-y: hidden;
     font-size: 14px;
 }
 
@@ -183,13 +294,60 @@ table.ui-jqgrid-btable {
 
 tr.ui-row-ltr {
     height: 40px;
-    border-bottom: 1px solid #e3e3e3 !important;
+    border-bottom: var(--shaded-border) !important;
 }
 
 .ui-jqgrid-btable .ui-state-highlight {
-    background: none !important;
+    background: #fffa90 !important;
 }
 /*end jqgrid*/
+/*bootstrap*/
+.btn{
+    height:30px;
+    line-height:0px;
+    border: none;
+    font-size: 12px;
+}
+.btn-primary {
+    color: white !important;
+    background: var(--primary-bg-color) !important;
+    border: none;
+    font-size: 12px;
+}
+
+.btn-primary:hover {
+    background: var(--primary-bg-color) !important;
+}
+
+.btn-primary:focus{
+    box-shadow:0 0 0 0.15rem rgb(145 137 121 / 68%)
+}
+
+.card{
+    height:250px !important;
+}
+
+.card-body{
+    overflow-y:auto;
+}
+
+.btn-group btn{
+    height: 30px;
+}
+
+.btn-group input {
+    height: 30px;
+    width: 350px;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.05rem rgba(0,0,0,.25) !important;
+}
+
+.btn:focus, .btn:active {
+    box-shadow: 0 0 0 0.15rem !important;
+}
+/*end bootstrap*/
 .loader {
     position: fixed;
     width: 100%;
@@ -240,9 +398,18 @@ tr.ui-row-ltr {
 }
 
 .sweet-alert {
-    border: 1px solid #e3e3e3;
+    border: var(--shaded-border) !important;
     -webkit-box-shadow: 0px 0px 10px 1px rgba(87,87,87,0.8);
     -moz-box-shadow: 0px 0px 10px 1px rgba(87,87,87,0.8);
     box-shadow: 0px 0px 10px 1px rgba(87,87,87,0.8);
 }
+
+.sweet-overlay {
+    z-index: 1060;
+}
   
+/*Datepicker*/
+
+.datepicker table tr td.disabled, .datepicker table tr td.disabled:hover{
+    color:#ccc !important;
+}

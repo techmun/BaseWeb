@@ -11,7 +11,7 @@ namespace BaseWeb.ViewModels
         [MaxLength(10)]
         public string CustCode { get; set; }
 
-        [DisplayName("Customer Name")]
+        [DisplayName("Company Name")]
         [Required(ErrorMessage = "Please enter custermer name")]
         [MaxLength(100)]
         public string CustName { get; set; }
@@ -34,10 +34,10 @@ namespace BaseWeb.ViewModels
         [RegularExpression("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", ErrorMessage = "invalid email address")]
         public string Email { get; set; }
 
-        [DisplayName("License No.")]
-        [Required(ErrorMessage = "Please enter license no.")]
-        [MaxLength(100)]
-        public string LicenseNo { get; set; }
+        //[DisplayName("License No.")]
+        //[Required(ErrorMessage = "Please enter license no.")]
+        //[MaxLength(100)]
+        //public string LicenseNo { get; set; }
         [DisplayName("Address 1.")]
         [Required(ErrorMessage = "Please enter Address 1.")]
         [MaxLength(100)]
@@ -60,6 +60,6 @@ namespace BaseWeb.ViewModels
         [Required(ErrorMessage = "Please enter Postcode.")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Only accept numeric (0-9)")]
         [MaxLength(5)]
-        public int PostCode { get; set; }
+        public string PostCode { get; set; }
     }
 }

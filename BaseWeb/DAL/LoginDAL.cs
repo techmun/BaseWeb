@@ -1,5 +1,5 @@
 ﻿using BaseWeb.Cores;
-using MySql.Data.MySqlClient;
+using Microsoft.Data.SqlClient;
 using System.Data;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
@@ -17,7 +17,7 @@ namespace BaseWeb.DAL
 
         public DataTable getUserPwById(string id)
         {
-            var cmd = new MySqlCommand();
+            var cmd = new SqlCommand();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "Login_GetAllUserById";
             cmd.Parameters.AddWithValue("id", id);

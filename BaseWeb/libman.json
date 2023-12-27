@@ -35,6 +35,31 @@
     {
       "library": "bootstrap-sweetalert@1.0.1",
       "destination": "wwwroot/bootstrap-sweetalert/"
+    },
+    {
+      "library": "bootstrap-datepicker@1.10.0",
+      "destination": "wwwroot/lib/bootstrap-datepicker/"
+    },
+    {
+      "library": "datepicker@1.0.10",
+      "destination": "wwwroot/lib/datepicker/",
+      "files": [
+        "datepicker.common.js",
+        "datepicker.common.min.js",
+        "datepicker.css",
+        "datepicker.esm.js",
+        "datepicker.esm.min.js",
+        "datepicker.js",
+        "datepicker.min.css",
+        "datepicker.min.js"
+      ]
+    },
+    {
+      "library": "moment.js@2.29.4",
+      "destination": "wwwroot/lib/moment.js/",
+      "files": [
+        "moment.min.js"
+      ]
     }
   ]
 }

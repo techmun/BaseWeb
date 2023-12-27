@@ -1,0 +1,252 @@
+﻿@{
+    Layout = "";
+}
+@model BaseWeb.ViewModels.ExpiryDateViewModel;
+
+<div class=" px-5 w-100">
+@using (Html.BeginForm("AddExpiryDate", "CustomerProfile", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m=>m.CustCode, new { @id = "hfCustCode"})
+
+        <div class="pb-2">
+            @*@Html.DisplayFor(m=>m.CustName)*@
+            @Html.LabelFor(m=>m.CustName)
+            <div class="inline">
+                <div class="input-icons">
+                    <i id="SearchIcon" class="fa fa-magnifying-glass icon"></i>
+                    <input placeholder="Type to Search..." autocomplete="off" class="form-control" id="txtSearchCustExp" />
+                </div>
+            </div>
+        </div>
+        <div class="me-3 mb-2">
+            <div class="row">
+                <div class="col-2">
+                    @Html.LabelFor(m=>m.ExpiredDate)
+                </div>
+                <div class="col-2">
+                    @Html.LabelFor(m=>m.DocType)
+                </div>
+                <div class="col-6">
+                    @Html.LabelFor(m=>m.Description)
+                </div>
+                <div class="col-2">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    @Html.TextBoxFor(m=>m.ExpiredDate,new{id="dpExpiryDate", @class="form-control", autocomplete="off"})
+                </div>
+                <div class="col-2">
+                    @Html.DropDownListFor(m=>m.DocType,ViewData["list"] as SelectList,new{@class="form-control"})
+                </div>
+                <div class="col-6">
+                    @Html.TextAreaFor(m=>m.Description,new{id="txtExpirDesc", @class="form-control",style="height:35px;"})
+                </div>
+                <div class="col-2">
+                    <input type="button" class="btn btn-primary w-100" id="btnAddExpiryDate" value="Add" />
+                 </div>
+
+             </div>
+        </div>
+}
+    <div>
+        <table id="ExpiryGrid"></table>
+        <div id="tblExpiryGridPager" style="text-align:center"> </div>
+        <span id="SpanNoExp" class="d-none">No Expiring Event</span>
+    </div>
+</div> 
+<script>
+    var mcList = [];
+
+    $(document).ready(function () {
+        $('#txtSearchCustExp').val('@Html.DisplayFor(m=>m.CustName)');
+        $(function () {
+            $("#dpExpiryDate").datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                startDate: new Date()
+            });
+        });
+       
+        getExpDateList();
+        
+    });
+
+    function getExpDateList(){
+        var CustCode = $('#hfCustCode').val();
+        $.ajax({
+            type: "GET",
+            url: "/CustomerProfile/GetExpirylist?CustCode=" + encodeURIComponent(CustCode),
+            success: function (result) {
+
+                if (result.success) {
+                    var exList = $.parseJSON(result.lsExDate);
+
+                    loadExpiryList(exList);
+                    if (exList.count > 0) {
+                    } else {
+                        $('#SpanNoExp').show();
+                    }
+                }
+                else
+                    swal("", result.message, "error");
+            }
+        });
+    }
+    var columns = [
+        { name: 'CompName', width: '500px' }
+    ];
+
+    $("#txtSearchCustExp").mcautocomplete({
+
+        columns: columns,
+        loading: true,
+        search: function (e, u) {
+            $('#SearchIcon').removeClass('fa-magnifying-glass');
+            $('#SearchIcon').addClass('fa-spinner fa-spin');
+        },
+        response: function (e, u) {
+
+            $('#SearchIcon').removeClass('fa-spinner fa-spin');
+            $('#SearchIcon').addClass('fa-magnifying-glass');
+        },
+        source: function (request, response) {
+            $.ajax({
+                dataType: "json",
+                type: 'Get',
+                url: "/CustomerProfile/GetCustProfList?filter=" + encodeURIComponent($('#txtSearchCustExp').val()),
+                global: false,
+                success: function (result) {
+                    console.log($('#txtSearchCustExp').val())
+                    mcList = [];
+                    if (result.success) {
+                        var objlist = $.parseJSON(result.lsCustProf);
+                        $.each(objlist, function (i, e) {
+                            var arr = Object.keys(e).map(function (key) { return e[key]; });
+                            mcList.push(arr);
+
+                        });
+                        response(mcList);
+                    }
+                    else {
+                        swal("", result.message, "error");
+                    }
+                },
+                error: function (data) {
+                }
+            });
+        },
+        minLength: 3,
+        timeout:500,
+        select:
+            function (event, ui) {
+                var result_text = (ui.item)
+                    ? ui.item[0] + ', ' + ui.item[1] + ', ' + ui.item[2]
+                    : '';
+
+                this.value = ui.item ? ui.item[0] : '';
+                $('#hfCustCode').val(ui.item[3]);
+                getExpDateList();
+                return false;
+            },
+
+
+    });
+
+    function loadExpiryList(ls) {
+        
+        $.jgrid.gridUnload("ExpiryGrid");
+        $("#ExpiryGrid").jqGrid({
+            datatype: "local",
+            data: ls,
+            colNames: ['id', 'ExpiryDate', 'Type', 'Description', ''],
+            colModel: [
+                { name: 'Id', index: "d", hidden: true, width: 100 },
+                { name: 'ExpiredDate', index: "ExpiredDate", width: 150 },
+                { name: 'DocType', index: "DocType", width: 100 },
+                { name: 'Description', index: "Description", width: 450 },
+                { name: 'DelExpiry', index: "DelExpiry", formatter: DelExpiry, width: 30 },
+            ],
+            height: '401',
+            rowNum: 10,
+            pager: '#tblExpiryGridPager'
+        });
+    }
+
+    function DelExpiry(cellvalue, options, rowObject) {
+        var innerhtml = '<i class="fa-solid fa-trash-can gridIcon" style="color:#de1212" onclick="btnDelExpDate(\'' + rowObject.Id + '\')"></i>';
+        return innerhtml;
+    }
+
+    $('#btnAddExpiryDate').click(function (e) {
+        e.preventDefault();
+        
+        var form = $("#ExpiryModal").find('form');
+        var actionUrl = form.attr('action');
+        var dataToSend = form.serialize();
+        console.log(dataToSend);
+        $.validator.unobtrusive.parse(form);
+        var validator = form.validate();
+        if (form.valid()) {
+            $.ajax({
+                url: actionUrl,
+                type: "POST",
+                data: dataToSend,
+                beforeSend: function () {
+
+                },
+                success: function (result) {
+                    if (result.success) {
+                        $('#dpExpiryDate').val('');
+                        $('#DocType').val('').change();
+                        $('#txtExpirDesc').val('');
+                        loadExpiryList($.parseJSON(result.lsExDate));
+                    }
+                    else if (!result.success && result.message != null) {
+                        swal("", result.message, "error");
+                    }
+                },
+                error: function (xhr, status, error) {
+                },
+                complete: function () {
+                },
+
+            });
+        }else{
+            swal('',validator.errorList[0].message,'warning');
+        }
+
+    });
+
+    function btnDelExpDate(id) {
+        var CustCode = $('#hfCustCode').val();
+        swal({
+            title: "",
+            text: "Confirm delete expiry date?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#DD6B55',
+            confirmButtonText: 'Confirm',
+            cancelButtonText: "Cancel",
+            closeOnConfirm: true
+        },
+            function (isConfirm) {
+
+                if (isConfirm) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/CustomerProfile/DeleteExpiryDate?id=" + id + "&CustCode=" + encodeURIComponent(CustCode),
+                        success: function (result) {
+                            if (result.success) {
+                                loadExpiryList($.parseJSON(result.lsExDate));
+                            } else {
+                                swal("", result.message, "error");
+                            }
+                        }
+                    });
+                }
+            });
+    }
+    
+</script>

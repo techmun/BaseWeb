@@ -9,15 +9,18 @@ namespace BaseWeb.Data
 
         public DbSet<UserLogin> Users { get; set; }
         public DbSet<Services> Services { get; set; }
-        public DbSet<DAProcess> DAProcess { get; set; }
+        public DbSet<JobProcess> JobProcess { get; set; }
+        public DbSet<JobHis> JobHis { get; set; }
+        public DbSet<DocProcess> DocProcess { get; set; }
+        public DbSet<DocHis> DocHis { get; set; }
         public DbSet<CustProf> CustProf { get; set; }
         public DbSet<Documents> Documents { get; set; }
-
+        public DbSet<ExpiryDate> ExpiryDate { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
             string constr = ConnStr.connection();
-            optionsBuilder.UseMySQL(constr);
+            optionsBuilder.UseSqlServer(constr);
         }
     }
 }

@@ -1,12 +1,9 @@
-using BaseWeb.Cores;
-using MySql.Data.MySqlClient;
-
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddTransient<MySqlConnection>(_ =>
-   new MySqlConnection(ConnStr.connection()));
+//builder.Services.AddTransient<MySqlConnection>(_ =>
+//   new MySqlConnection(ConnStr.connection()));
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddDistributedMemoryCache();
