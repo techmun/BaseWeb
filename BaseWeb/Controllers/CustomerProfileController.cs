@@ -20,6 +20,7 @@ namespace BaseWeb.Controllers
     public class CustomerProfileController : Controller
     {
         [Authentication]
+        [NoDirectAccess]
         public IActionResult Index()
         {
             return View();
@@ -52,6 +53,8 @@ namespace BaseWeb.Controllers
             }
         }
 
+        [Authentication]
+        [NoDirectAccess]
         [HttpGet]
         public IActionResult AddEdit(string QueryType)
         {
@@ -138,6 +141,7 @@ namespace BaseWeb.Controllers
         }
 
         [Authentication]
+        [NoDirectAccess]
         public IActionResult ExpiryDate(string CustCode, string CustName)
         {
             var model = new ExpiryDateViewModel();
@@ -155,7 +159,7 @@ namespace BaseWeb.Controllers
             ViewData["list"] = list;
             return View(model);
         }
-        [HttpGet]
+        [HttpPost]
         public async Task<JsonResult> ImportCP(IList<IFormFile> files)
         {
             string filepath = "";
@@ -175,12 +179,13 @@ namespace BaseWeb.Controllers
                 ds = ImportExport.ImportExcel(filepath, "CP");
                 using (var context = new AppDbContext())
                 {
+                    var custProf = context.CustProf.ToList();
                     foreach (DataTable dt in ds.Tables)
                     {
                         foreach (DataRow row in dt.Rows)
                         {
                             var custCode = row["Code"].ToString();
-                            if (!string.IsNullOrEmpty(custCode) && context.CustProf.Where(m=>m.CustCode == custCode).ToList().Count() == 0 )
+                            if (!string.IsNullOrEmpty(custCode) && custProf.Where(m=>m.CustCode == custCode).ToList().Count() == 0 )
                             {
                                 var docs = new CustProf()
                                 {
@@ -321,7 +326,7 @@ namespace BaseWeb.Controllers
         {
             return (from a in context.ExpiryDate
                     where a.CustCode == custCode
-                    select new { Id = a.Id,ExDate = a.ExpiredDate, ExpiredDate = a.ExpiredDate.Value.ToString("dd/MM/yyyy"), DocType = a.DocType, Description = a.Description }).OrderBy(m=>m.ExDate).ToList();
+                    select new { Id = a.Id,ExDate = a.ExpiredDate, ExpiredDate = a.ExpiredDate.ToString("dd/MM/yyyy"), DocType = a.DocType, Description = a.Description }).OrderBy(m=>m.ExDate).ToList();
         }
 
     }

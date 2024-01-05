@@ -1,7 +1,10 @@
 ﻿using BaseWeb.Cores;
 using BaseWeb.DAL;
+using BaseWeb.Data;
 using BaseWeb.Models;
 using BaseWeb.ViewModels;
+using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Data;
@@ -18,7 +21,7 @@ namespace BaseWeb.Controllers
             }
             else
             {
-                return RedirectToAction(controllerName:"ProcessingList",actionName:"Index");
+                return RedirectToAction(controllerName: "Home", actionName: "Index");
             }
         }
         [HttpPost]
@@ -32,7 +35,6 @@ namespace BaseWeb.Controllers
 
             if (!isSuccess)
             {
-                ModelState.AddModelError("LoginId", "User Not Found");
                 return View(userLogin);
             }
             else
@@ -41,7 +43,9 @@ namespace BaseWeb.Controllers
             }
 
 
-            return RedirectToAction(controllerName: "ProcessingList", actionName: "Index");
+            return RedirectToAction(controllerName: "Home", actionName: "Index");
+
+
         }
 
         public IActionResult Logout()
@@ -58,17 +62,29 @@ namespace BaseWeb.Controllers
             string constr = ConnStr.connection();
 
             LoginDAL dal = new LoginDAL(constr);
-
-            var dt = dal.getUserPwById(userLogin.LoginId);
-
-            if (dt.Rows.Count > 0)
+            var ul = new UserLogin();
+            var lid = userLogin.LoginId;
+            using (var context = new AppDbContext())
             {
-                var pw = dt.AsEnumerable().Select(r => r["Password"]).ToList().FirstOrDefault();
-                var ePw = Encrypt.Encrypted(userLogin.Password);
-                if (pw.ToString() != ePw)
-                {
+                ul = context.Users.Where(m => m.LoginId == lid).FirstOrDefault();
 
-                    userLogin.errMsg = "Login Id or Password is incorrect!";
+            }
+            if(ul != null)
+            {
+                if (ul.LoginId.Length > 0)
+                {
+                    var pw = ul.Password;
+                    var ePw = Encrypt.Encrypted(userLogin.Password);
+                    if (pw.ToString() != ePw)
+                    {
+
+                        userLogin.errMsg = "Login Id or Password is incorrect!";
+                        return false;
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("LoginId", "User Not Found");
                     return false;
                 }
             }
@@ -77,6 +93,7 @@ namespace BaseWeb.Controllers
                 ModelState.AddModelError("LoginId", "User Not Found");
                 return false;
             }
+
 
 
             return true;

@@ -4,8 +4,10 @@ using BaseWeb.Models;
 using DocumentFormat.OpenXml.InkML;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Data;
 using System.Net.Http.Headers;
+using static BaseWeb.Utilities.ActionFilterConfig;
 
 namespace BaseWeb.Controllers
 {
@@ -16,6 +18,32 @@ namespace BaseWeb.Controllers
 
             return View();
         }
+
+        [NoDirectAccess]
+        public JsonResult GetDAList(string filter)
+        {
+            var services = new List<Services>();
+            var govList = new object();
+            try
+            {
+                using(var context = new AppDbContext()) {
+                    services = context.Services.ToList();
+                    govList = services.Select(m=>m.GovDept).Distinct();
+                }
+                var lsDA = JsonConvert.SerializeObject(services);
+                return Json(new { lsDA = lsDA, govList = govList, success = true });
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { message = ex.Message, success = false });
+            }
+            finally
+            {
+
+            }
+        }
+
 
         [HttpPost]
         public async Task<JsonResult> ImportDA(IList<IFormFile> files)
@@ -35,8 +63,10 @@ namespace BaseWeb.Controllers
                 }
                 DataSet ds = new DataSet();
                 ds = ImportExport.ImportExcel(filepath, "DA", 2);
+                
                 using (var context = new AppDbContext())
                 {
+                    var ser = context.Services.ToList();
                     foreach (DataTable dt in ds.Tables)
                     {
                         if (dt.TableName != "Readme")
@@ -49,41 +79,45 @@ namespace BaseWeb.Controllers
                                 var serCount = context.Services.Where(m => m.GovDept == govDept).Count() + 1;
                                 SerId = govDept + serCount.ToString().PadLeft(3,'0');
                             }
-                            var service = new Services()
+                            if(ser.Count() > 0 && ser.Where(m=>m.SerID == SerId).ToList().Count() == 0)
                             {
-                                SerID = SerId,
-                                GovDept = dtName[1].ToString().Replace(" ", ""),
-                                SerName = dtName[2].ToString(),
-                                CreatedBy = WebSession.GetSession(EnumSession.UserName),
-                                CreatedDate = DateTime.Now,
-                                EditedBy = WebSession.GetSession(EnumSession.UserName),
-                                EditedDate = DateTime.Now
-                            };
-
-                            context.Services.Add(service);
-
-                            foreach (DataRow row in dt.Rows)
-                            {
-                                if (!string.IsNullOrEmpty(row["Item"].ToString()))
+                                var service = new Services()
                                 {
-                                    var docs = new Documents()
+                                    SerID = SerId,
+                                    GovDept = dtName[1].ToString().Replace(" ", ""),
+                                    SerName = dtName[2].ToString(),
+                                    CreatedBy = WebSession.GetSession(EnumSession.UserName),
+                                    CreatedDate = DateTime.Now,
+                                    EditedBy = WebSession.GetSession(EnumSession.UserName),
+                                    EditedDate = DateTime.Now
+                                };
+
+                                context.Services.Add(service);
+                                foreach (DataRow row in dt.Rows)
+                                {
+                                    if (!string.IsNullOrEmpty(row["Item"].ToString()))
                                     {
-                                        SerID = dtName[0].ToString(),
-                                        Document = row["Item"].ToString(),
-                                        PreparedBy = row["Client/Runner"].ToString(),
-                                        Mandatory = row["Mandatory"].ToString(),
-                                        UploadDoc = row["Upload Doc"].ToString(),
-                                        CreatedBy = WebSession.GetSession(EnumSession.UserName),
-                                        CreatedDate = DateTime.Now,
-                                        EditedBy = WebSession.GetSession(EnumSession.UserName),
-                                        EditedDate = DateTime.Now,
-                                        Step = "1"
-                                    };
-                                    context.Documents.Add(docs);
+                                        var docs = new Documents()
+                                        {
+                                            SerID = dtName[0].ToString(),
+                                            Document = row["Item"].ToString(),
+                                            PreparedBy = row["Client/Runner"].ToString(),
+                                            Mandatory = row["Mandatory"].ToString(),
+                                            UploadDoc = row["Upload Doc"].ToString(),
+                                            CreatedBy = WebSession.GetSession(EnumSession.UserName),
+                                            CreatedDate = DateTime.Now,
+                                            EditedBy = WebSession.GetSession(EnumSession.UserName),
+                                            EditedDate = DateTime.Now,
+                                            Step = "1"
+                                        };
+                                        context.Documents.Add(docs);
+                                    }
+
+
                                 }
-
-
                             }
+
+                            
                         }
                     }
                     context.SaveChanges();

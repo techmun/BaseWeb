@@ -106,7 +106,6 @@
         var selval = e.target.value;
         var hfSelService = $(this).closest('.col-4').prevAll('.hfSelService').first();
         var ViewCheckList = $(this).closest('.col-4').next('.ViewCheckList').first();
-        console.log(ViewCheckList)
         hfSelService.val(selval);
         ViewCheckList.append('<button class="btn btn-success rounded-oval" style="position:absolute;top:50%;" onclick="loadCheckListGrid(\'' + selval + '\')" ><i class="fa-solid fa-list-check" style="padding-right:5px"></i></>View</button>')
     });

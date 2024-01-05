@@ -78,7 +78,6 @@ body {
     display: none;
 }
 
-
 input.input-validation-error,
 textarea.input-validation-error,
 select.input-validation-error {
@@ -194,13 +193,27 @@ select.input-validation-error {
     cursor:pointer;
     scale:1.01;
 }
+
+.expiryGrid {
+    height: 450px;
+    overflow: auto;
+}
+
+.gridContainer {
+    width: 100%;
+    overflow: auto;
+    height: 300px;
+}
 /*sm*/
 @media (min-width: 576px) {
     .modal-dialog{
         min-width:500px;
     }
+    .expiryGrid {
+        height: 450px;
+        overflow: auto;
+    }
 }
-
 
 /*md*/
 @media (min-width: 768px) {
@@ -209,6 +222,13 @@ select.input-validation-error {
     }
     .modal-dialog {
         min-width: 700px;
+    }
+    .expiryGrid {
+        height: 600px;
+        overflow: auto;
+    }
+    .gridContainer {
+        height: auto;
     }
 }
 

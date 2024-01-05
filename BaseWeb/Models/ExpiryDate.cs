@@ -11,7 +11,7 @@ namespace BaseWeb.Models
         [MaxLength(10)]
         public string CustCode { get; set; }
 
-        public DateTime? ExpiredDate { get; set; }
+        public DateTime ExpiredDate { get; set; }
 
         [MaxLength(5)]
         public string DocType { get; set; } = "";
