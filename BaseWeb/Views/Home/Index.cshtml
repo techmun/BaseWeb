@@ -2,151 +2,47 @@
     ViewData["Title"] = "Dashboard";
 }
 
+@model List<BaseWeb.ViewModels.ExpDateListViewModel>
+<h2>Expiry Date</h2>
+<div class="pb-5 expiryGrid">
+    @foreach (var m in Model)
+    {
+        <h3 class="pt-3">@m.month</h3>
+        @foreach (var item in m.exDateList)
+        {
+            <div class="row m-2 d-lg-flex d-none" style="border-bottom:1px solid #ccc">
+                <div class="col-1">
+                    <span>@item.ExpiredDate.ToString("dd/MM/yyyy")</span>
+                </div>
+                <div class="col-4">
+                    <span>@item.CustName</span>
+                </div>
+                <div class="col-1">
+                    <span>@item.DocType</span>
+                </div>
+                <div class="col-6">
+                    <span>@item.Description</span>
+                </div>
+            </div>
+            <div class="pb-2 d-block d-lg-none">
+                <div class="border h-auto">
+                    <div class="card-header bg-transparent">
+                        <span>Expiry Date: </span>
+                        <span>@item.ExpiredDate.ToString("dd/MM/yyyy")</span>
+                        <span class="mx-5">@item.DocType</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <span>@item.CustName</span>
+                        </h5>
+                        <span>@item.Description</span>
+                    </div>
+                </div>
+            </div>
+            <div class="pb-5 d-block d-lg-none">
+            </div>
 
-<div style="height:600px;overflow:auto">
-    <h3 class="pt-3">December</h3>
-    <div class="row m-2" style="border-bottom:1px solid #ccc">
-        <div class="col-1">
-            <span>12/12/2023</span>
-        </div>
-        <div class="col-4">
-            <span>PUSAT PERKEMBANGAN KANAK-KANAK SINARAN</span>
-        </div>
-        <div class="col-1">
-            <span>DA</span>
-        </div>
-        <div class="col-6">
-            <span>Description PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG</span>
-        </div>
-    </div>
-    <div class="row m-2" style="border-bottom:1px solid #ccc">
-        <div class="col-1">
-            <span>12/12/2023</span>
-        </div>
-        <div class="col-4">
-            <span>PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG</span>
-        </div>
-        <div class="col-1">
-            <span>DA</span>
-        </div>
-        <div class="col-6">
-            <span>Description</span>
-        </div>
-    </div>
-    <h3 class="pt-3">December</h3>
-    <div class="row m-2" style="border-bottom:1px solid #ccc">
-        <div class="col-1">
-            <span>12/12/2023</span>
-        </div>
-        <div class="col-4">
-            <span>PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG</span>
-        </div>
-        <div class="col-1">
-            <span>DA</span>
-        </div>
-        <div class="col-6">
-            <span>Description PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG</span>
-        </div>
-    </div>
-    <div class="row m-2" style="border-bottom:1px solid #ccc">
-        <div class="col-1">
-            <span>12/12/2023</span>
-        </div>
-        <div class="col-4">
-            <span>PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG</span>
-        </div>
-        <div class="col-1">
-            <span>DA</span>
-        </div>
-        <div class="col-6">
-            <span>Description</span>
-        </div>
-    </div>
-    <h3 class="pt-3">December</h3>
-    <div class="row m-2" style="border-bottom:1px solid #ccc">
-        <div class="col-1">
-            <span>12/12/2023</span>
-        </div>
-        <div class="col-4">
-            <span>PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG</span>
-        </div>
-        <div class="col-1">
-            <span>DA</span>
-        </div>
-        <div class="col-6">
-            <span>Description PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG</span>
-        </div>
-    </div>
-    <div class="row m-2" style="border-bottom:1px solid #ccc">
-        <div class="col-1">
-            <span>12/12/2023</span>
-        </div>
-        <div class="col-4">
-            <span>PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG</span>
-        </div>
-        <div class="col-1">
-            <span>DA</span>
-        </div>
-        <div class="col-6">
-            <span>Description</span>
-        </div>
-    </div>
-    <h3 class="pt-3">December</h3>
-    <div class="row m-2" style="border-bottom:1px solid #ccc">
-        <div class="col-1">
-            <span>12/12/2023</span>
-        </div>
-        <div class="col-4">
-            <span>PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG</span>
-        </div>
-        <div class="col-1">
-            <span>DA</span>
-        </div>
-        <div class="col-6">
-            <span>Description PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG</span>
-        </div>
-    </div>
-    <div class="row m-2" style="border-bottom:1px solid #ccc">
-        <div class="col-1">
-            <span>12/12/2023</span>
-        </div>
-        <div class="col-4">
-            <span>PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG</span>
-        </div>
-        <div class="col-1">
-            <span>DA</span>
-        </div>
-        <div class="col-6">
-            <span>Description</span>
-        </div>
-    </div>
-    <h3 class="pt-3">December</h3>
-    <div class="row m-2" style="border-bottom:1px solid #ccc">
-        <div class="col-1">
-            <span>12/12/2023</span>
-        </div>
-        <div class="col-4">
-            <span>PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG</span>
-        </div>
-        <div class="col-1">
-            <span>DA</span>
-        </div>
-        <div class="col-6">
-            <span>Description PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG</span>
-        </div>
-    </div>
-    <div class="row m-2" style="border-bottom:1px solid #ccc">
-        <div class="col-1">
-            <span>12/12/2023</span>
-        </div>
-        <div class="col-4">
-            <span>PUSAT PERKEMBANGAN KANAK-KANAK SINARAN GEMILANG</span>
-        </div>
-        <div class="col-1">
-            <span>DA</span>
-        </div>
-        <div class="col-6">
-            <span>Description</span>
-        </div>
-    </div>
+        }
+
+    }
 </div>

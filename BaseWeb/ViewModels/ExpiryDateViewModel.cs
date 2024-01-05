@@ -14,7 +14,7 @@ namespace BaseWeb.ViewModels
 
         [DisplayName("Expiry Date")]
         [Required]
-        public DateTime? ExpiredDate { get; set; } = null;
+        public DateTime ExpiredDate { get; set; }
 
         [DisplayName("Type")]
         [MaxLength(5)]

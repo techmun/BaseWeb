@@ -6,20 +6,20 @@
     <div class="btn-toolbar mb-5" role="toolbar" aria-label="Toolbar with button groups">
         <div class="btn-group me-3 mb-2" role="group" aria-label="Add group">
             <button class="btn btn-primary" id="btnAddCustProf"><i class="fa-solid fa-plus px-1"></i></>Add</button>
-            <label for="CustProfFiles" class="btn btn-primary btn-label"><i class="fa-solid fa-upload px-1"></i><span>Import</span></label>
             <input id="CustProfFiles" style="visibility:hidden;display:none;" type="file" onchange="uploadCustProfFile('CustProfFiles')">
-            <button class="btn btn-primary" id="btnExpCustProf"><i class="fa-solid fa-download px-1"></i></>Export</button>
+            <label for="CustProfFiles" class="btn btn-primary btn-label"><i class="fa-solid fa-upload px-1"></i><span>Import</span></label>
+            <button class="btn btn-primary" id="btnExpiryDate"><i class="fa-solid fa-calendar-days px-1"></i></>Expiry Date</button>
+            @*<button class="btn btn-primary" id="btnExpCustProf"><i class="fa-solid fa-download px-1"></i></>Export</button>*@
         </div>
         <div class="btn-group me-3" role="group" aria-label="Search Group">
             <input type="text" class="form-control" autocomplete="off" placeholder="Search..." id="txtSearchCustProf" />
             <button class="btn btn-primary" id="btnCustProfSearch" value="Search"><i class="fa fa-magnifying-glass icon px-1"></i>Search</button>
         </div>
         <div class="btn-group me-3 mb-2" role="group" aria-label="function group">
-            <button class="btn btn-primary" id="btnExpiryDate"><i class="fa-solid fa-calendar-days px-1"></i></>Expiry Date</button>
-            <button class="btn btn-primary" id="btnSyarat"><i class="fa-regular fa-file-lines px-1"></i></>Syarat-syarat</button>
+            @*<button class="btn btn-primary" id="btnSyarat"><i class="fa-regular fa-file-lines px-1"></i></>Syarat-syarat</button>*@
         </div>
     </div>
-    <div>
+    <div class="gridContainer">
         <table id="CustProfGrid"></table>
         <div id="tblCustProfGridPager" style="text-align:center"> </div>
     </div>
@@ -115,13 +115,14 @@
             ],
             height: '401',
             rowNum: 10,
-            pager: '#tblCustProfGridPager'
+            pager: '#tblCustProfGridPager',
+            shrinkToFit: false,
         });
     }
 
     function viewCP(cellvalue, options, rowObject) {
-        var innerhtml = '<i class="fa-solid fa-user-pen gridIcon" style="color:#223658" onclick="btnViewCP()"></i>';
-        return innerhtml;
+        //var innerhtml = '<i class="fa-solid fa-user-pen gridIcon" style="color:#223658" onclick="btnViewCP()"></i>';
+        return '';
     }
 
     function delCP(cellvalue, options, rowObject) {
@@ -194,6 +195,7 @@
     });
 
     function uploadCustProfFile(inputId) {
+        debugger
         var input = document.getElementById(inputId);
         var files = input.files;
         var formData = new FormData();
