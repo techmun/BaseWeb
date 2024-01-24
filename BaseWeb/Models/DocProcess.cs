@@ -30,5 +30,6 @@ namespace BaseWeb.Models
         public string UploadedBy { get; set; } = "";
 
         public DateTime? UploadedDate { get; set; }
+        public string UploadedPath { get; set; }
     }
 }

@@ -26,5 +26,7 @@ namespace BaseWeb.Models
         [MaxLength(25)]
         public string EditedBy { get; set; } = "";
         public DateTime? EditedDate { get; set; }
+
+        public Boolean active { get;set; } = true;
     }
 }

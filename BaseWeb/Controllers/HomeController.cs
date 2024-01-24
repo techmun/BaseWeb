@@ -19,7 +19,7 @@ namespace BaseWeb.Controllers
             {
                 var grpExp = (from ed in context.ExpiryDate
                               join cp in context.CustProf on ed.CustCode equals cp.CustCode
-                              select new { ed, cp.CustName }).OrderBy(m => m.ed.ExpiredDate).ToList();
+                              select new { ed, cp.CustName }).Where(m=>m.ed.active == true).OrderBy(m => m.ed.ExpiredDate).ToList();
                               //group ed by new { month = ed.ExpiredDate.Month, year = ed.ExpiredDate.Year } into d
                               //select new { dt = string.Format("{0}/{1}", d.Key.month, d.Key.year) }).ToList();
 
@@ -38,8 +38,9 @@ namespace BaseWeb.Controllers
                     
                     foreach (var ed in expList)
                     {
-                        var expListVM = new ExpiryDateViewModel()
+                         var expListVM = new ExpiryDateViewModel()
                         {
+                            id= ed.ed.Id,
                             CustCode = ed.ed.CustCode,
                             CustName = ed.CustName,
                             ExpiredDate = ed.ed.ExpiredDate,
@@ -56,9 +57,21 @@ namespace BaseWeb.Controllers
             return View(model);
         }
 
-        public IActionResult Privacy()
+        public JsonResult removeExpDate(string id)
         {
-            return View();
+            try
+            {
+                using(var context = new AppDbContext())
+                {
+                    var selExpDate = context.ExpiryDate.Where(m=>m.Id.ToString() == id).FirstOrDefault();
+                    selExpDate.active = false;
+                    context.SaveChanges();
+                }
+                return Json(new { success = true });
+            }
+            catch (Exception ex) {
+                return Json(new { message = ex.Message, success = false });
+            }
         }
 
     }

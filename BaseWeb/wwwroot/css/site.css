@@ -11,6 +11,7 @@
 
 ::-webkit-scrollbar {
     width: 5px;
+    height: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -19,14 +20,9 @@
 }
 
 html {
-    font-size: 14px;
+    font-size: 12px;
 }
 
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-}
 
 html {
     position: relative;
@@ -116,7 +112,7 @@ select.input-validation-error {
 }
 
 .side-nav-bar .nav-item.active a span {
-    font-size: 20px !important;
+    font-size: 14px !important;
     font-weight:400 !important;
 }
 
@@ -195,7 +191,7 @@ select.input-validation-error {
 }
 
 .expiryGrid {
-    height: 450px;
+    height: 400px;
     overflow: auto;
 }
 
@@ -204,14 +200,15 @@ select.input-validation-error {
     overflow: auto;
     height: 300px;
 }
+
+.red-label{
+    background:red;
+    color:white;
+}
 /*sm*/
 @media (min-width: 576px) {
     .modal-dialog{
         min-width:500px;
-    }
-    .expiryGrid {
-        height: 450px;
-        overflow: auto;
     }
 }
 
@@ -223,12 +220,12 @@ select.input-validation-error {
     .modal-dialog {
         min-width: 700px;
     }
-    .expiryGrid {
-        height: 600px;
-        overflow: auto;
-    }
     .gridContainer {
         height: auto;
+    }
+
+    html {
+        font-size: 14px;
     }
 }
 
@@ -252,9 +249,55 @@ select.input-validation-error {
     .container {
         max-width: 90% !important;
     }
+
+    .expiryGrid {
+        height: 450px;
+        overflow: auto;
+    }
+
     .nav-d i, .nav-d span{
-        font-size:16px;
+        font-size:14px;
         font-weight:300;
+    }
+
+    .side-nav-bar .nav-item.active a span {
+        font-size: 16px !important;
+        font-weight: 400 !important;
+    }
+
+    html {
+        font-size: 16px;
+    }
+}
+
+/*xl*/
+@media (min-width: 1601px) {
+    .container {
+        max-width: 90% !important;
+    }
+
+    .nav-d i, .nav-d span {
+        font-size: 16px;
+        font-weight: 300;
+    }
+
+
+    .expiryGrid {
+        height: 600px;
+        overflow: auto;
+    }
+
+    .side-nav-bar .nav-item.active a span {
+        font-size: 20px !important;
+        font-weight: 400 !important;
+    }
+
+    tr.ui-row-ltr {
+        height: 40px !important;
+        border-bottom: var(--shaded-border) !important;
+    }
+    .ui-jqgrid .ui-jqgrid-bdiv {
+        font-size: 14px !important;
     }
 }
 
@@ -305,7 +348,7 @@ table.ui-jqgrid-btable {
 }
 
 .ui-jqgrid .ui-jqgrid-bdiv {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .ui-jqgrid-bdiv .ui-jqgrid-btable {
@@ -313,7 +356,7 @@ table.ui-jqgrid-btable {
 }
 
 tr.ui-row-ltr {
-    height: 40px;
+    height: 30px;
     border-bottom: var(--shaded-border) !important;
 }
 

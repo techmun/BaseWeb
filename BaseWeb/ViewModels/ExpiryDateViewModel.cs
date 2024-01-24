@@ -5,6 +5,7 @@ namespace BaseWeb.ViewModels
 {
     public class ExpiryDateViewModel
     {
+        public int id { get; set; }
         [MaxLength(10)]
         public string CustCode { get; set; }
 

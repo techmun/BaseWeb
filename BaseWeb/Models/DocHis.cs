@@ -35,5 +35,7 @@ namespace BaseWeb.Models
         public string JobEndBy { get; set; }
         public DateTime? JobEndDate { get; set; }
 
+        public string UploadedPath { get; set; }
+
     }
 }

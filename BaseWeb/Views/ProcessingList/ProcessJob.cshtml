@@ -1,0 +1,70 @@
+﻿@model BaseWeb.ViewModels.JobProcessViewModel
+
+<div class="row">
+    <div class="col-3" id="jobList">
+        @foreach (var item in Model.JobList)
+        {
+            @functions {
+            public string GetClassFromStatus(string status)
+            {
+                return status == "" ? "btn-light" : status == "Pending" ? "btn-warning" : "btn-success";
+            }
+        }
+            <input type="button" onclick="loadDocList('@item.jobProcess.Id')" class="btn @GetClassFromStatus(item.status) w-100 border" value="@item.jobProcess.SerID - @item.jobProcess.Services" />
+        }
+    </div>
+    <div class="col-9" id="docList">
+        <div class="gridContainer">
+            <table id="CheckListGrid"></table>
+        </div>
+    </div>
+</div>
+<script>
+    var docList = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.docList));
+
+    $(document).ready(function(){
+        loadCheckListGrid(docList);
+    })
+    function loadDocList(id) {
+        var selDocList = docList.filter(function (e) {
+            return e.JobId == id;
+        });
+        console.log(selDocList);
+    }
+
+    function loadCheckListGrid(ls) {
+        $.jgrid.gridUnload("CheckListGrid");
+        $("#ViewCLModal").modal('show');
+        $("#CheckListGrid").jqGrid({
+            datatype: "local",
+            data: ls,
+            colNames: ['Service', 'Documents', 'Client', 'Runner'],
+            colModel: [
+                { name: 'SerID', index: "SerID", width: 75 },
+                { name: 'Document', index: "Document", width: 500 },
+                { name: 'Client', index: "Client", width: 80, align: 'center', formatter: PbClient },
+                { name: 'Runner', index: "Runner", width: 80, align: 'center', formatter: PbRunner },
+            ],
+            loadComplete: function (data) {
+            },
+            height: '650',
+            rowNum: -1
+        });
+    }
+
+
+    function PbClient(cellvalue, options, rowObject) {
+        var PreparedBy = "";
+        if (rowObject.PreparedBy == "C") {
+            PreparedBy = "<i class='fa-solid fa-check'style='color:#00f01c'></i>"
+        }
+        return PreparedBy
+    }
+    function PbRunner(cellvalue, options, rowObject) {
+        var PreparedBy = "";
+        if (rowObject.PreparedBy == "R") {
+            PreparedBy = "<i class='fa-solid fa-check'style='color:#00f01c'></i>"
+        }
+        return PreparedBy
+    }
+</script>

@@ -46,14 +46,14 @@
                                 <i class="fa-solid fa-inbox fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Dashboard</span>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        @*<li class="nav-item">
                             <a class="nav-link nav-d text-white" asp-area="" asp-controller="ProcessingList" asp-action="Index">
                                 <i class="fa-solid fa-square-poll-horizontal fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Processing List</span>
                             </a>
-                        </li>
+                        </li>*@
                         <li class="nav-item">
                             <a class="nav-link nav-d text-white" asp-area="" asp-controller="CustomerProfile" asp-action="Index">
-                                <i class="fa-solid fa-user fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Customer Profile</span>
+                                <i class="fa-solid fa-user fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Cust. Profile</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -78,7 +78,7 @@
                         </li>*@
                         <li class="nav-item">
                             <a class="nav-link nav-d text-white" asp-area="" asp-controller="Auth" asp-action="Logout">
-                                <i class="fa-solid fa-arrow-right-from-bracket fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Logout</span>
+                                <i class="fa-solid fa-arrow-right-from-bracket fa-sm p-3" style="width:50px"></i><span >Logout</span>
                             </a>
                         </li>
                     </ul>
@@ -90,29 +90,29 @@
         <div class="main">
             <div class="row">
                 <div class="col-0 col-lg-2 vh-100 d-none d-lg-block nav-col">
-                    <div style="height:250px;text-align:center;">
-                        <img src="../img/logo.png" style="width:300px"/>
+                    <div style="height:250px;text-align:center;display: table-cell;vertical-align: middle;">
+                        <img src="../img/logo.png" style="width:100%"/>
                     </div>
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between p-3">
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between p-3 w-100">
                         <ul class="navbar-nav side-nav-bar flex-grow-1">
                             <li class="nav-item">
                                 <a class="nav-link nav-d text-white" asp-area="" asp-controller="Home" asp-action="Index">
-                                    <i class="fa-solid fa-inbox fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Dashboard</span>
+                                    <i class="fa-solid fa-inbox fa-sm p-3" style="width:50px"></i><span>Dashboard</span>
                                 </a>
                             </li>
-                           <li class="nav-item">
+                           @*<li class="nav-item">
                                 <a class="nav-link nav-d text-white" asp-area="" asp-controller="ProcessingList" asp-action="Index">
-                                    <i class="fa-solid fa-square-poll-horizontal fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Processing List</span>
+                                    <i class="fa-solid fa-square-poll-horizontal fa-sm p-3" style="width:50px"></i><span>Processing List</span>
                                 </a>
-                            </li>
+                            </li>*@
                             <li class="nav-item">
                                 <a class="nav-link nav-d text-white" asp-area="" asp-controller="CustomerProfile" asp-action="Index">
-                                    <i class="fa-solid fa-user fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Customer Profile</span>
+                                    <i class="fa-solid fa-user fa-sm p-3" style="width:50px"></i><span>Cust. Profile</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link nav-d text-white" asp-area="" asp-controller="DocAllocate" asp-action="Index">
-                                    <i class="fa-solid fa-file-lines fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Doc Allocate</span>
+                                    <i class="fa-solid fa-file-lines fa-sm p-3" style="width:50px"></i><span>Doc Allocate</span>
                                 </a>
                             </li>
                             @* <li class="nav-item">
@@ -132,7 +132,7 @@
                             </li>*@
                             <li class="nav-item">
                                 <a class="nav-link nav-d text-white" asp-area="" asp-controller="Auth" asp-action="Logout">
-                                    <i class="fa-solid fa-arrow-right-from-bracket fa-sm p-3" style="width:50px"></i><span class="mx-lg-4">Logout</span>
+                                    <i class="fa-solid fa-arrow-right-from-bracket fa-sm p-3" style="width:50px"></i><span>Logout</span>
                                 </a>
                             </li>
                         </ul>
@@ -140,10 +140,10 @@
                 </div>
                 <div class=" col-12 col-lg-10 body-col">
                     <div class="container">
-                        <div class="h1 align-text-bottom title-font pt-5 pb-5 border-bottom">
+                        <div class="h1 align-text-bottom title-font pt-3 pb-3 pt-xxl-5 pb-xxl-5 border-bottom">
                             @ViewData["Title"]
                         </div>
-                        <main role="main" class="pb-2 pt-5">
+                        <main role="main" class="pb-2 pt-2 pt-xxl-5">
                             @RenderBody()
                         </main>
                     </div>

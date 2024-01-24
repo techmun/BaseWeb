@@ -3,18 +3,26 @@
 }
 
 @model List<BaseWeb.ViewModels.ExpDateListViewModel>
-<h2>Expiry Date</h2>
+<h3>Expiry Date</h3>
 <div class="pb-5 expiryGrid">
     @foreach (var m in Model)
     {
-        <h3 class="pt-3">@m.month</h3>
+        <h4 class="pt-3">@m.month</h4>
         @foreach (var item in m.exDateList)
         {
-            <div class="row m-2 d-lg-flex d-none" style="border-bottom:1px solid #ccc">
-                <div class="col-1">
+            @functions {
+        public string GetClassFromStatus(DateTime ed)
+        {
+            var todaysDate = (ed - DateTime.Today).TotalDays < 30;
+            Console.WriteLine(todaysDate);
+            return todaysDate ? "red-label" : "";
+        }
+    }
+            <div class="row m-2 d-lg-flex d-none " style="border-bottom:1px solid #ccc; ">
+                <div class="col-1 @GetClassFromStatus(item.ExpiredDate)">
                     <span>@item.ExpiredDate.ToString("dd/MM/yyyy")</span>
                 </div>
-                <div class="col-4">
+                <div class="col-3">
                     <span>@item.CustName</span>
                 </div>
                 <div class="col-1">
@@ -22,6 +30,9 @@
                 </div>
                 <div class="col-6">
                     <span>@item.Description</span>
+                </div>
+                <div class="col-1">
+                    <input type="button" class="btn btn-primary" onclick="removeExpDate('@item.id')" value="done" />
                 </div>
             </div>
             <div class="pb-2 d-block d-lg-none">
@@ -46,3 +57,20 @@
 
     }
 </div>
+
+<script>
+    function removeExpDate(id){
+        $.ajax({
+            type: "GET",
+            url: "/Home/removeExpDate?id="+id,
+            success: function (result) {
+
+                if (result.success) {
+                    location.reload();
+                }
+                else
+                    swal("", result.message, "error");
+            }
+        });
+    }
+</script>
