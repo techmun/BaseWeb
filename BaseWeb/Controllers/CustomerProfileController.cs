@@ -151,8 +151,13 @@ namespace BaseWeb.Controllers
             var list = new SelectList(new[]
             {
                 new { ID = "", Name = "" },
-                new { ID = "DA", Name = "DA" },
-                new { ID = "PC", Name = "PC" }
+                new { ID = "License", Name = "License" },
+                new { ID = "Permit", Name = "Permit" },
+                new { ID = "SSM", Name = "SSM" },
+                new { ID = "Syarat", Name = "Syarat" },
+                new { ID = "PC", Name = "PC" },
+                new { ID = "FE", Name = "FE" },
+                new { ID = "Other", Name = "Other" }
             },
             "ID", "Name", 1);
 
@@ -232,7 +237,7 @@ namespace BaseWeb.Controllers
                     {
                         CustCode = model.CustCode,
                         DocType = model.DocType,
-                        Description = model.Description,
+                        Description = string.IsNullOrEmpty(model.Description) ? "" : model.Description,
                         ExpiredDate = model.ExpiredDate,
                         CreatedBy = WebSession.GetSession(EnumSession.UserName),
                         CreatedDate = DateTime.Now,

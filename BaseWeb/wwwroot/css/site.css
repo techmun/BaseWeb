@@ -193,6 +193,7 @@ select.input-validation-error {
 .expiryGrid {
     height: 400px;
     overflow: auto;
+    font-size:12px;
 }
 
 .gridContainer {
@@ -205,6 +206,61 @@ select.input-validation-error {
     background:red;
     color:white;
 }
+.yellow-label {
+    background: yellow;
+}
+.input-validation-success {
+    background: #ecfeef;
+}
+
+/*bootstrap*/
+.btn {
+    height: 25px;
+    line-height: 0px;
+    border: none;
+    font-size: 12px;
+}
+
+.btn-primary {
+    color: white !important;
+    background: var(--primary-bg-color) !important;
+    border: none;
+    font-size: 12px;
+}
+
+    .btn-primary:hover {
+        background: var(--primary-bg-color) !important;
+    }
+
+    .btn-primary:focus {
+        box-shadow: 0 0 0 0.15rem rgb(145 137 121 / 68%)
+    }
+
+.card {
+    height: 250px !important;
+}
+
+.card-body {
+    overflow-y: auto;
+}
+
+.btn-group btn {
+    height: 25px;
+}
+
+.btn-group input {
+    height: 25px;
+    width: 350px;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.05rem rgba(0,0,0,.25) !important;
+}
+
+.btn:focus, .btn:active {
+    box-shadow: 0 0 0 0.15rem !important;
+}
+/*end bootstrap*/
 /*sm*/
 @media (min-width: 576px) {
     .modal-dialog{
@@ -269,7 +325,28 @@ select.input-validation-error {
         font-size: 16px;
     }
 }
+/*xl*/
+@media (min-width: 1400px) {
+    
 
+    .expiryGrid {
+        font-size:14px;
+    }
+
+    .btn {
+        height: 30px;
+    }
+    .btn-group btn {
+        height: 30px;
+    }
+
+    .btn-group input {
+        height: 30px;
+        width: 350px;
+    }
+
+
+}
 /*xl*/
 @media (min-width: 1601px) {
     .container {
@@ -285,6 +362,7 @@ select.input-validation-error {
     .expiryGrid {
         height: 600px;
         overflow: auto;
+        font-size:16px;
     }
 
     .side-nav-bar .nav-item.active a span {
@@ -303,10 +381,7 @@ select.input-validation-error {
 
 /*xxl*/
 @media (min-width: 2000px) {
-    .container {
-        max-width: 80% !important;
-    }
-
+    
     .nav-d i, .nav-d span {
         font-size: 18px;
         font-weight: 300;
@@ -364,53 +439,7 @@ tr.ui-row-ltr {
     background: #fffa90 !important;
 }
 /*end jqgrid*/
-/*bootstrap*/
-.btn{
-    height:30px;
-    line-height:0px;
-    border: none;
-    font-size: 12px;
-}
-.btn-primary {
-    color: white !important;
-    background: var(--primary-bg-color) !important;
-    border: none;
-    font-size: 12px;
-}
 
-.btn-primary:hover {
-    background: var(--primary-bg-color) !important;
-}
-
-.btn-primary:focus{
-    box-shadow:0 0 0 0.15rem rgb(145 137 121 / 68%)
-}
-
-.card{
-    height:250px !important;
-}
-
-.card-body{
-    overflow-y:auto;
-}
-
-.btn-group btn{
-    height: 30px;
-}
-
-.btn-group input {
-    height: 30px;
-    width: 350px;
-}
-
-.form-control:focus {
-    box-shadow: 0 0 0 0.05rem rgba(0,0,0,.25) !important;
-}
-
-.btn:focus, .btn:active {
-    box-shadow: 0 0 0 0.15rem !important;
-}
-/*end bootstrap*/
 .loader {
     position: fixed;
     width: 100%;

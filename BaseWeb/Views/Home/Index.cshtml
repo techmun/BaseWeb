@@ -11,15 +11,22 @@
         @foreach (var item in m.exDateList)
         {
             @functions {
-        public string GetClassFromStatus(DateTime ed)
+        public string GetClassFromStatus(String docType, DateTime ed)
         {
-            var todaysDate = (ed - DateTime.Today).TotalDays < 30;
-            Console.WriteLine(todaysDate);
-            return todaysDate ? "red-label" : "";
+            string classRtn = "";
+            if (docType != "Syarat" && (ed - DateTime.Today).TotalDays < 45)
+            {
+                classRtn = "red-label";
+            }
+            else if (docType == "Syarat" && (ed - DateTime.Today).TotalDays < 100)
+            {
+                classRtn = "yellow-label";
+            }
+            return classRtn;
         }
     }
             <div class="row m-2 d-lg-flex d-none " style="border-bottom:1px solid #ccc; ">
-                <div class="col-1 @GetClassFromStatus(item.ExpiredDate)">
+                <div class="col-1 @GetClassFromStatus(item.DocType,item.ExpiredDate)">
                     <span>@item.ExpiredDate.ToString("dd/MM/yyyy")</span>
                 </div>
                 <div class="col-3">

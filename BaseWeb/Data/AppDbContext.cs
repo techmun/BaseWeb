@@ -16,6 +16,7 @@ namespace BaseWeb.Data
         public DbSet<CustProf> CustProf { get; set; }
         public DbSet<Documents> Documents { get; set; }
         public DbSet<ExpiryDate> ExpiryDate { get; set; }
+        public DbSet<WebSetup> WebSetup { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 

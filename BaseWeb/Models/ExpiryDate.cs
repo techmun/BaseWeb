@@ -13,7 +13,7 @@ namespace BaseWeb.Models
 
         public DateTime ExpiredDate { get; set; }
 
-        [MaxLength(5)]
+        [MaxLength(20)]
         public string DocType { get; set; } = "";
 
         public string Description { get; set; } = "";

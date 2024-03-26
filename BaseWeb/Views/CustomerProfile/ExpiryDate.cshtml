@@ -4,7 +4,7 @@
 @model BaseWeb.ViewModels.ExpiryDateViewModel;
 
 <div class=" px-5 w-100">
-@using (Html.BeginForm("AddExpiryDate", "CustomerProfile", FormMethod.Post))
+    @using (Html.BeginForm("AddExpiryDate", "CustomerProfile", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m=>m.CustCode, new { @id = "hfCustCode"})
@@ -35,30 +35,30 @@
             </div>
             <div class="row">
                 <div class="col-2">
-                    @Html.TextBoxFor(m=>m.ExpiredDate,new{id="dpExpiryDate", @class="form-control", autocomplete="off"})
+                    @Html.TextBoxFor(m=>m.ExpiredDate,new{id="dpExpiryDate", @class="form-control", autocomplete="off", disabled="disabled"})
                 </div>
                 <div class="col-2">
-                    @Html.DropDownListFor(m=>m.DocType,ViewData["list"] as SelectList,new{@class="form-control"})
+                    @Html.DropDownListFor(m=>m.DocType,ViewData["list"] as SelectList,new{id="txtDocType",@class="form-control", disabled="disabled"})
                 </div>
                 <div class="col-6">
-                    @Html.TextAreaFor(m=>m.Description,new{id="txtExpirDesc", @class="form-control",style="height:35px;"})
+                    @Html.TextAreaFor(m=>m.Description,new{id="txtExpirDesc", @class="form-control",style="height:35px;", disabled="disabled"})
                 </div>
                 <div class="col-2">
                     <input type="button" class="btn btn-primary w-100" id="btnAddExpiryDate" value="Add" />
-                 </div>
+                </div>
 
-             </div>
+            </div>
         </div>
-}
+    }
     <div>
         <table id="ExpiryGrid"></table>
         <div id="tblExpiryGridPager" style="text-align:center"> </div>
         <span id="SpanNoExp" class="d-none">No Expiring Event</span>
     </div>
-</div> 
+</div>
 <script>
     var mcList = [];
-
+    var prevCompName = "";
     $(document).ready(function () {
         $('#txtSearchCustExp').val('@Html.DisplayFor(m=>m.CustName)');
         $(function () {
@@ -67,32 +67,39 @@
                 autoclose: true,
                 startDate: new Date()
             });
+            $("#dpExpiryDate").val('');
         });
-       
+
         getExpDateList();
-        
+
     });
 
-    function getExpDateList(){
+    function getExpDateList() {
         var CustCode = $('#hfCustCode').val();
-        $.ajax({
-            type: "GET",
-            url: "/CustomerProfile/GetExpirylist?CustCode=" + encodeURIComponent(CustCode),
-            success: function (result) {
+        if(CustCode != "" & CustCode != null){
+            $.ajax({
+                type: "GET",
+                url: "/CustomerProfile/GetExpirylist?CustCode=" + encodeURIComponent(CustCode),
+                success: function (result) {
 
-                if (result.success) {
-                    var exList = $.parseJSON(result.lsExDate);
-
-                    loadExpiryList(exList);
-                    if (exList.count > 0) {
-                    } else {
-                        $('#SpanNoExp').show();
+                    if (result.success) {
+                        var exList = $.parseJSON(result.lsExDate);
+                        $('#txtSearchCustExp').addClass('input-validation-success');
+                        $('#dpExpiryDate').removeAttr('disabled');
+                        $('#txtDocType').removeAttr('disabled');
+                        $('#txtExpirDesc').removeAttr('disabled');
+                        $('#dpExpiryDate').focus();
+                        loadExpiryList(exList);
                     }
+                    else
+                        swal("", result.message, "error");
                 }
-                else
-                    swal("", result.message, "error");
-            }
-        });
+
+            });
+        }else{
+            loadExpiryList([]);
+        }
+        
     }
     var columns = [
         { name: 'CompName', width: '500px' }
@@ -138,7 +145,7 @@
             });
         },
         minLength: 3,
-        timeout:500,
+        timeout: 500,
         select:
             function (event, ui) {
                 var result_text = (ui.item)
@@ -146,6 +153,7 @@
                     : '';
 
                 this.value = ui.item ? ui.item[0] : '';
+                prevCompName = this.value;
                 $('#hfCustCode').val(ui.item[3]);
                 getExpDateList();
                 return false;
@@ -153,9 +161,11 @@
 
 
     });
-
+    $('#txtSearchCustExp').focusout(function () {
+        $(this).val(prevCompName);
+    });
     function loadExpiryList(ls) {
-        
+
         $.jgrid.gridUnload("ExpiryGrid");
         $("#ExpiryGrid").jqGrid({
             datatype: "local",
@@ -181,13 +191,22 @@
 
     $('#btnAddExpiryDate').click(function (e) {
         e.preventDefault();
-        
+
+        if ($('#hfCustCode').val() == "") {
+            $('#txtSearchCustExp').addClass('input-validation-error');
+            swal('', 'Company Name is required', 'warning');
+            return;
+        }
         var form = $("#ExpiryModal").find('form');
         var actionUrl = form.attr('action');
         var dataToSend = form.serialize();
         console.log(dataToSend);
+        if ($('#txtDocType').val() != "Other" && $('#txtDocType').val() != "") {
+            $('#txtExpirDesc').addClass('ignore');
+        }
         $.validator.unobtrusive.parse(form);
-        var validator = form.validate();
+        var validator = form.validate()
+        validator.settings.ignore = ".ignore, :hidden";
         if (form.valid()) {
             $.ajax({
                 url: actionUrl,
@@ -199,7 +218,7 @@
                 success: function (result) {
                     if (result.success) {
                         $('#dpExpiryDate').val('');
-                        $('#DocType').val('').change();
+                        $('#txtDocType').val('').change();
                         $('#txtExpirDesc').val('');
                         loadExpiryList($.parseJSON(result.lsExDate));
                     }
@@ -213,8 +232,8 @@
                 },
 
             });
-        }else{
-            swal('',validator.errorList[0].message,'warning');
+        } else {
+            swal('', validator.errorList[0].message, 'warning');
         }
 
     });
@@ -248,5 +267,5 @@
                 }
             });
     }
-    
+
 </script>

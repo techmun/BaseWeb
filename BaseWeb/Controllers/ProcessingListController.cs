@@ -11,6 +11,8 @@ using Newtonsoft.Json;
 using BaseWeb.Data;
 using BaseWeb.Migrations;
 using BaseWeb.ViewModels;
+using BaseWeb.DAL;
+using AspNetCore;
 
 namespace BaseWeb.Controllers
 {
@@ -189,6 +191,23 @@ namespace BaseWeb.Controllers
             {
                 return Json(new { result=false });
             }
+        }
+
+        public ActionResult ProcessJob(string CustCode)
+        { 
+            var model = new JobProcessViewModel();
+            var jobList = new List<JobProcess>();
+            var docList = new List<DocProcess>();
+
+            var plDAL = new ProcessingListDAL(ConnStr.connection());
+            DataSet ds = new DataSet();
+            ds = plDAL.getProcessingList(CustCode);
+            docList = DataConvertor.CreateListFromTable<DocProcess>(ds.Tables[0]);
+            jobList = DataConvertor.CreateListFromTable<JobProcess>(ds.Tables[1]);
+            //var grouped = jobList.GroupBy(m => m.Id).ToList();
+            //model.docList = docList;
+
+            return View(model);
         }
     }
 
